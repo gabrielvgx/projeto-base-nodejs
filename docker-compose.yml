@@ -1,0 +1,18 @@
+services:
+  app-node:
+    build: .
+    container_name: app-node
+    image: app-node:latest
+    user: node
+    working_dir: /var/www/app
+    # environment:
+    #   - NODE_ENV=production
+    # environment:
+    #   - DATABASE_URL=file:/var/www/app/backend/prisma/dev.db
+    volumes:
+      - .:/var/www/app
+    ports:
+      - '3000:3000'
+    restart: always
+    # command: node backend/dist/server.js
+    command: 'tail -f /dev/null'
