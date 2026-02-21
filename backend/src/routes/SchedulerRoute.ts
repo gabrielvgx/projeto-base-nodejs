@@ -2,7 +2,7 @@ import { UserController } from '@controllers';
 import type { Application } from 'express';
 import { UserValidation } from '@validations';
 
-class UserRoute {
+class SchedulerRoute {
   register(app: Application) {
     app.post('/user', UserValidation.create, async (req, res) => {
       try {
@@ -51,6 +51,6 @@ class UserRoute {
   }
 }
 
-const instance = new UserRoute();
-export { instance as UserRoute };
+const instance = new SchedulerRoute();
+export { instance as SchedulerRoute };
 export default instance;

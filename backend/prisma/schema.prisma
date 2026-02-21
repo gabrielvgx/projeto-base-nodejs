@@ -7,16 +7,103 @@ datasource db {
   provider = "sqlite"
 }
 
-
 enum Role {
-  user
+  customer
   admin
+  professional
 }
 
 model User {
-  id    String @id @default(uuid())
-  name  String
-  email String @unique
-  role  Role   @default(user)
-  password String
+  id                     String      @id @default(uuid())
+  name                   String
+  email                  String      @unique
+  role                   Role        @default(customer)
+  password               String
+  customerSchedulers     Scheduler[] @relation("SchedulerCustomer")
+  professionalSchedulers Scheduler[] @relation("SchedulerProfessional")
+  createdAt              DateTime    @default(now())
+  professionalAvailability ProfessionalAvailability[]
 }
+
+model ProfessionalAvailability {
+  id String @id @default(uuid())
+
+  professionalId String
+  professional User @relation(fields: [professionalId], references: [id])
+
+  weekday Int // 0-6 (domingo a sábado)
+
+  startMinutes Int
+  endMinutes   Int
+
+  createdAt DateTime @default(now())
+}
+
+model Activity {
+  id                       String   @id @default(uuid())
+  name                     String
+  description              String?
+  estimatedPrice           Float    @default(0)
+  estimatedDurationMinutes Int
+  bookingLeadTimeMinutes   Int      @default(0)
+  bookingLeadDays          Int      @default(0)
+  schedulerItems           SchedulerItem[]
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id                String   @id @default(uuid())
+  name              String
+  description       String?
+  price             Float    @default(0)
+  estimatedMinPrice Float    @default(0)
+  estimatedMaxPrice Float    @default(0)
+  schedulerItems SchedulerItem[]
+  createdAt DateTime @default(now())
+}
+
+model SchedulerItem {
+  id String @id @default(uuid())
+
+  schedulerId String
+  scheduler   Scheduler @relation(fields: [schedulerId], references: [id])
+
+  activityId String?
+  activity   Activity? @relation(fields: [activityId], references: [id])
+
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id])
+
+  quantity Int @default(1)
+
+  priceAtBooking Float?
+  durationMinutes Int?
+
+  orderIndex Int?
+
+  createdAt DateTime @default(now())
+}
+
+enum SchedulerStatus {
+  pending
+  confirmed
+  in_progress
+  completed
+  cancelled
+}
+
+model Scheduler {
+  id String @id @default(uuid())
+  customerId String
+  customer User @relation("SchedulerCustomer", fields: [customerId], references: [id])
+  professionalId String?
+  professional User? @relation("SchedulerProfessional", fields: [professionalId], references: [id])
+  scheduledAt DateTime
+  estimatedStartAt DateTime?
+  estimatedEndAt   DateTime?
+  items SchedulerItem[]
+  status SchedulerStatus @default(pending)
+  createdAt DateTime @default(now())
+}
+
+

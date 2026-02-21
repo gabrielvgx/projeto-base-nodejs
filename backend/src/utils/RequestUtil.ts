@@ -1,4 +1,4 @@
-import type { Request } from '../@types/server.js';
+import type { Request } from '@types';
 
 class RequestUtil {
   getToken(req: Request): string | null {
@@ -10,4 +10,5 @@ class RequestUtil {
   }
 }
 
-export default new RequestUtil();
+const instance = new RequestUtil();
+export { instance as RequestUtil };

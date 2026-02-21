@@ -9,4 +9,5 @@ class Env {
   }
 }
 
-export default new Env();
+const instance = new Env();
+export { instance as Env };

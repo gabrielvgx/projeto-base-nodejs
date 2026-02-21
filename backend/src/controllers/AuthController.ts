@@ -1,6 +1,6 @@
-import UserService from '@services/UserService.js';
-import type { AuthCredentials } from '../@types/auth.js';
-import JWT from '@utils/JWT.js';
+import { UserService } from '@services';
+import type { AuthCredentials } from '@types';
+import { JWT } from '@utils';
 
 class AuthController {
   async authenticate(credentials: AuthCredentials) {
@@ -13,4 +13,5 @@ class AuthController {
   }
 }
 
-export default new AuthController();
+const instance = new AuthController();
+export { instance as AuthController };

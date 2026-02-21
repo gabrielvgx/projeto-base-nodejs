@@ -2,19 +2,12 @@ import z from 'zod';
 import type { Request, Response, NextFunction } from '@types';
 import { ErrorValidation } from './ErrorValidation.js';
 
-export enum UserRole {
-  ADMIN = 'admin',
-  CUSTOMER = 'customer',
-  PROFESSIONAL = 'professional',
-}
-
-class UserValidation {
+class SchedulerValidation {
   create = (req: Request, res: Response, next: NextFunction) => {
     try {
       const schema = {
         email: z.email(),
         name: z.string().min(5).max(255),
-        role: z.enum(UserRole),
         password: z.string().min(6).max(255),
       };
       z.object(schema).parse(req.body);
@@ -25,5 +18,5 @@ class UserValidation {
   };
 }
 
-const instance = new UserValidation();
-export { instance as UserValidation };
+const instance = new SchedulerValidation();
+export { instance as SchedulerValidation };

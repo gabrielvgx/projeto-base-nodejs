@@ -27,4 +27,5 @@ class JWT {
   }
 }
 
-export default new JWT();
+const instance = new JWT();
+export { instance as JWT };

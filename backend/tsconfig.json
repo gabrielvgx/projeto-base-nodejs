@@ -1,53 +1,49 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-
-    // Layout de arquivos
+    "baseUrl": "./src",
     "rootDir": "./src",
     "outDir": "./dist",
 
-    // Ambiente - Node.js LTS (v22+) com ESModules
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "target": "es2023",
     "lib": ["es2023"],
     "types": ["node"],
 
-    // Outputs auxiliares
     "sourceMap": false,
     "declaration": false,
     "declarationMap": false,
 
-    // Tipagem estrita
-    "strict": true, // Habilita um conjunto de verificações estritas
-    "noUncheckedIndexedAccess": true, // arr[0] pode ser undefined
-    "exactOptionalPropertyTypes": true, // Distingue `prop?: string` de `prop: string | undefined`
-    "noUncheckedSideEffectImports": true, // Imports sem binding são verificados
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedSideEffectImports": true,
 
-    // Boas práticas - evita código morto e descuido
-    "noUnusedLocals": true, // Erro em variáveis locais não usadas
-    "noUnusedParameters": true, // Erro em parâmetros não usados
-    "noImplicitReturns": true, // Toda branch de uma função deve retornar valor
-    "noFallthroughCasesInSwitch": true, // Evita cases sem break/return acidentais
-    "noImplicitOverride": true, // Obriga uso explícito de `override` em subclasses
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
 
-    // Compatibilidade e interop
-    "verbatimModuleSyntax": true, // Garante `import type` onde necessário
-    "isolatedModules": true, // Compatível com bundlers e transpiladores
-    "moduleDetection": "force", // Trata todos os arquivos como módulos
-    "skipLibCheck": true, // Não valida .d.ts de dependências (mais rápido)
-    "esModuleInterop": true, // Facilita imports de libs CommonJS (ex: `import fs from 'fs'`)
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
 
     "paths": {
-      "@types/*": ["src/@types/*"],
-      "@interface/*": ["src/interfaces/*"],
-      "@middlewares/*": ["src/middlewares/*"],
-      "@validations/*": ["src/validations/*"],
-      "@routes/*": ["src/routes/*"],
-      "@controllers/*": ["src/controllers/*"],
-      "@services/*": ["src/services/*"],
-      "@utils/*": ["src/utils/*"]
+      "@types": ["@types/index.ts"],
+      "@db": ["db/index.ts"],
+      "@interfaces": ["interfaces/index.ts"],
+      "@middlewares": ["middlewares/index.ts"],
+      "@validations": ["validations/index.ts"],
+      "@routes": ["routes/index.ts"],
+      "@controllers": ["controllers/index.ts"],
+      "@services": ["services/index.ts"],
+      "@utils": ["utils/index.ts"],
+      "@prisma": ["generated/prisma/client.ts"]
     },
+
     "typeRoots": ["./node_modules/@types", "./src/@types"]
   },
   "include": ["src/**/*"],

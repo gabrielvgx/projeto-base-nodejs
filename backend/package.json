@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch --tsconfig tsconfig.json src/server.ts",
     "build": "tsc && tsc-alias",
     "format": "prettier --write \"src/**/*.{ts,js,json,md,css,scss,html}\"",
     "format:check": "prettier --check \"src/**/*.{ts,js,json,md,css,scss,html}\"",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:apply": "prisma migrate deploy",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "db:format": "prisma format",
+    "barrels:gen": "node ./scripts/generate-barrels.js src"
   },
   "keywords": [],
   "author": "",

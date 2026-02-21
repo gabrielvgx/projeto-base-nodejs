@@ -1,7 +1,7 @@
-import JWT from '@utils/JWT.js';
-import type { Request, Response, NextFunction } from '../@types/server.js';
-import RequestUtil from '@utils/RequestUtil.js';
-import { UserRole } from '../@types/user.js';
+import { JWT } from '@utils';
+import type { Request, Response, NextFunction } from '@types';
+import { RequestUtil } from '@utils';
+import { UserRole } from '@validations';
 
 class UserScopeMiddleware {
   adminOnly = (req: Request, res: Response, next: NextFunction) => {
@@ -19,4 +19,5 @@ class UserScopeMiddleware {
   };
 }
 
-export default new UserScopeMiddleware();
+const instance = new UserScopeMiddleware();
+export { instance as UserScopeMiddleware };

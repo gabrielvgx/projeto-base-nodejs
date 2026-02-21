@@ -10,7 +10,7 @@ const userSelect = {
   role: true,
 };
 
-class UserService {
+class SchedulerService {
   async create(user: UserCreatePayload) {
     const { email, name, role, password } = user;
     const encryptedPassword = await Crypt.encrypt(password);
@@ -81,5 +81,5 @@ class UserService {
   }
 }
 
-const instance = new UserService();
-export { instance as UserService };
+const instance = new SchedulerService();
+export { instance as SchedulerService };

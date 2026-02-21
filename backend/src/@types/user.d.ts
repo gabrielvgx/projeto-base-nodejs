@@ -1,7 +1,4 @@
-export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
-}
+import type { UserRole } from '@validations';
 
 export type UserCreatePayload = {
   email: string;

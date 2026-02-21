@@ -1,4 +1,4 @@
-import AuthController from '@controllers/AuthController.js';
+import { AuthController } from '@controllers';
 import type { Application } from 'express';
 
 class AuthRoute {
@@ -14,4 +14,6 @@ class AuthRoute {
   }
 }
 
-export default new AuthRoute();
+const instance = new AuthRoute();
+export { instance as AuthRoute };
+export default instance;

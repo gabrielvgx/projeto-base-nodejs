@@ -12,4 +12,5 @@ class Crypt {
   }
 }
 
-export default new Crypt();
+const instance = new Crypt();
+export { instance as Crypt };

@@ -1,5 +1,5 @@
 import type { Application } from 'express';
-import AppMiddleware from './AppMiddleware.js';
+import { AppMiddleware } from './AppMiddleware.js';
 
 class MiddlewareManager {
   register(app: Application) {
@@ -7,4 +7,5 @@ class MiddlewareManager {
   }
 }
 
-export default new MiddlewareManager();
+const instance = new MiddlewareManager();
+export { instance as MiddlewareManager };

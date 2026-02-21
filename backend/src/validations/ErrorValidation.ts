@@ -1,4 +1,4 @@
-import type { Response } from '../@types/server.js';
+import type { Response } from '@types';
 import z, { ZodError } from 'zod';
 
 // type ErrorType = {
@@ -21,4 +21,5 @@ class ErrorValidation {
   }
 }
 
-export default new ErrorValidation();
+const instance = new ErrorValidation();
+export { instance as ErrorValidation };

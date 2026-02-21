@@ -1,6 +1,6 @@
-import type { IMiddleware } from "src/interfaces/IMiddleware.js";
-import type { Application } from "express";
-import express from "express";
+import type { IMiddleware } from '@interfaces';
+import type { Application } from 'express';
+import express from 'express';
 
 class AppMiddleware implements IMiddleware {
   register(app: Application) {
@@ -8,4 +8,5 @@ class AppMiddleware implements IMiddleware {
   }
 }
 
-export default new AppMiddleware();
+const instance = new AppMiddleware();
+export { instance as AppMiddleware };

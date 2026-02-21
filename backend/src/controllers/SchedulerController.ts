@@ -2,7 +2,7 @@ import { UserService } from '@services';
 import type { UserCreatePayload } from '@types';
 import type { User } from '@prisma';
 
-class UserController {
+class SchedulerController {
   async create(user: UserCreatePayload) {
     const result = await UserService.create(user);
     return result;
@@ -21,5 +21,5 @@ class UserController {
   }
 }
 
-const instance = new UserController();
-export { instance as UserController };
+const instance = new SchedulerController();
+export { instance as SchedulerController };
