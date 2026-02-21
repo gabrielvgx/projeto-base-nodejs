@@ -21,6 +21,33 @@ class UserRoute {
         res.status(500).send(`Error listing users. ${error instanceof Error ? error.message : ''}`);
       }
     });
+
+    app.get('/user/:id', async (req, res) => {
+      try {
+        const result = await UserController.find({ id: req.params.id });
+        res.json(result);
+      } catch (error) {
+        res.status(500).send(`Error listing users. ${error instanceof Error ? error.message : ''}`);
+      }
+    });
+
+    app.put('/user/:id', async (req, res) => {
+      try {
+        const result = await UserController.update(req.params.id, req.body);
+        res.json(result);
+      } catch (error) {
+        res.status(500).send(`Error updating user. ${error instanceof Error ? error.message : ''}`);
+      }
+    });
+
+    app.delete('/user/:id', async (req, res) => {
+      try {
+        await UserController.delete(req.params.id);
+        res.status(204).send();
+      } catch (error) {
+        res.status(500).send(`Error deleting user. ${error instanceof Error ? error.message : ''}`);
+      }
+    });
   }
 }
 
