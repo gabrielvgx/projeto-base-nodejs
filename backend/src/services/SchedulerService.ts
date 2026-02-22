@@ -1,83 +1,190 @@
-import { Crypt } from '@utils';
-import type { UserCreatePayload } from '@types';
+import type { SchedulerCreatePayload } from '@types';
 import { prisma } from '@db';
-import type { User } from '@prisma';
+import { ProductService } from './ProductService.js';
+import { ActivityService } from './ActivityService.js';
 
 const userSelect = {
   id: true,
-  email: true,
   name: true,
-  role: true,
 };
 
 class SchedulerService {
-  async create(user: UserCreatePayload) {
-    const { email, name, role, password } = user;
-    const encryptedPassword = await Crypt.encrypt(password);
-
-    const createdUser = await prisma.user.create({
+  private async getProductsList(products: SchedulerCreatePayload['products']) {
+    return Promise.all(
+      products.map(async (product) => {
+        const result = await ProductService.find(product.id);
+        if (!result) {
+          throw new Error(`Product with id ${product.id} not found`);
+        }
+        return { ...result, quantity: product.quantity };
+      }),
+    );
+  }
+  private async getActivitiesList(activities: SchedulerCreatePayload['activities']) {
+    return Promise.all(
+      activities.map(async (activity) => {
+        const result = await ActivityService.find(activity.id);
+        if (!result) {
+          throw new Error(`Activity with id ${activity.id} not found`);
+        }
+        return result;
+      }),
+    );
+  }
+  async create(scheduler: SchedulerCreatePayload) {
+    const { customerId, professionalId, activities, products, scheduledAt } = scheduler;
+    const activitiesList = await this.getActivitiesList(activities);
+    const productsList = await this.getProductsList(products);
+    const schedulerItems = [
+      ...activitiesList.map((activity, orderIndex) => ({
+        productId: null,
+        activityId: activity.id,
+        priceAtBooking: activity.estimatedPrice || null,
+        durationMinutes: activity.estimatedDurationMinutes,
+        orderIndex: orderIndex + 1,
+      })),
+      ...productsList.map((product, orderIndex) => ({
+        activityId: null,
+        productId: product.id,
+        quantity: product.quantity,
+        priceAtBooking: product.price || null,
+        orderIndex: orderIndex + 1,
+      })),
+    ];
+    const createdScheduler = await prisma.scheduler.create({
       data: {
-        email,
-        name,
-        role,
-        password: encryptedPassword,
+        customerId: customerId,
+        professionalId: professionalId ?? null,
+        status: 'pending',
+        scheduledAt: new Date(scheduledAt),
+        items: {
+          create: schedulerItems,
+        },
       },
-      select: userSelect,
+      omit: {
+        customerId: true,
+        professionalId: true,
+      },
+      include: {
+        professional: {
+          select: userSelect,
+        },
+        customer: {
+          select: userSelect,
+        },
+        items: {
+          include: {
+            activity: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+              },
+            },
+            product: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                estimatedMinPrice: true,
+                estimatedMaxPrice: true,
+              },
+            },
+          },
+          omit: {
+            productId: true,
+            activityId: true,
+            schedulerId: true,
+          },
+        },
+      },
     });
 
-    return createdUser;
+    return createdScheduler;
   }
 
-  async find(params: Partial<User>) {
-    if (!params.id && !params.email) {
-      throw new Error('At least one of id or email must be provided to find a user.');
-    }
-    const { password, ...searchParams } = params;
-    const user = await prisma.user.findFirst({
-      where: searchParams,
-      select: { ...userSelect, password: !!password },
+  async find(id: string) {
+    const scheduler = await prisma.scheduler.findUnique({
+      where: { id },
+      include: {
+        items: true,
+        customer: {
+          select: userSelect,
+        },
+        professional: {
+          select: userSelect,
+        },
+      },
     });
-    const { password: userPassword, ...userInfo } = user || {};
-
-    if (user && password && userPassword) {
-      const isValidPassword = await Crypt.isValid(password, userPassword);
-      if (!isValidPassword) {
-        throw new Error('Invalid credentials');
-      }
-    }
-    return userInfo;
+    return scheduler;
   }
 
   async list() {
-    const users = await prisma.user.findMany({
-      select: userSelect,
+    const schedulers = await prisma.scheduler.findMany({
+      include: {
+        items: {
+          select: {
+            orderIndex: true,
+            priceAtBooking: true,
+            durationMinutes: true,
+            activity: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                estimatedPrice: true,
+                estimatedDurationMinutes: true,
+              },
+            },
+            product: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                price: true,
+                estimatedMinPrice: true,
+                estimatedMaxPrice: true,
+              },
+            },
+          },
+        },
+        customer: {
+          select: userSelect,
+        },
+        professional: {
+          select: userSelect,
+        },
+      },
+      omit: {
+        customerId: true,
+        professionalId: true,
+      },
     });
-    return users;
+    return schedulers;
   }
 
   async delete(id: string) {
-    await prisma.user.delete({
+    await prisma.scheduler.delete({
       where: { id },
     });
   }
 
-  async update(id: string, data: Partial<UserCreatePayload>) {
-    const dataToUpdate: Partial<UserCreatePayload> = { ...data };
+  async update(id: string, data: Partial<SchedulerCreatePayload>) {
+    const dataToUpdate: Partial<SchedulerCreatePayload> = { ...data };
 
-    if (data.password) {
-      dataToUpdate.password = await Crypt.encrypt(data.password);
-    }
-
-    if (data.email) {
-      delete dataToUpdate.email;
-    }
-
-    const updatedUser = await prisma.user.update({
+    const updatedScheduler = await prisma.scheduler.update({
       where: { id },
       data: dataToUpdate,
-      select: userSelect,
+      include: {
+        customer: {
+          select: userSelect,
+        },
+        professional: {
+          select: userSelect,
+        },
+      },
     });
-    return updatedUser;
+    return updatedScheduler;
   }
 }
 

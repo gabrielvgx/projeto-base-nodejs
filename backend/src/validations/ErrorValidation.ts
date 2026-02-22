@@ -16,6 +16,7 @@ class ErrorValidation {
         errors: z.flattenError(err),
       });
     } else {
+      console.log(err);
       res.status(500).json({ message: 'Internal server error' });
     }
   }

@@ -1,23 +1,22 @@
-import { UserService } from '@services';
-import type { UserCreatePayload } from '@types';
-import type { User } from '@prisma';
+import type { SchedulerCreatePayload } from '@types';
+import { SchedulerService } from '@services';
 
 class SchedulerController {
-  async create(user: UserCreatePayload) {
-    const result = await UserService.create(user);
+  async create(scheduler: SchedulerCreatePayload) {
+    const result = await SchedulerService.create(scheduler);
     return result;
   }
   list() {
-    return UserService.list();
+    return SchedulerService.list();
   }
-  async find(params: Partial<User>) {
-    return UserService.find(params);
+  async find(id: string) {
+    return SchedulerService.find(id);
   }
-  async update(id: string, data: Partial<UserCreatePayload>) {
-    return UserService.update(id, data);
+  async update(id: string, data: Partial<SchedulerCreatePayload>) {
+    return SchedulerService.update(id, data);
   }
   async delete(id: string) {
-    return UserService.delete(id);
+    return SchedulerService.delete(id);
   }
 }
 

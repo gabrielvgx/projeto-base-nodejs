@@ -1,51 +1,52 @@
-import { UserController } from '@controllers';
+import { SchedulerController } from '@controllers';
 import type { Application } from 'express';
-import { UserValidation } from '@validations';
+import { SchedulerValidation } from '@validations';
 
 class SchedulerRoute {
   register(app: Application) {
-    app.post('/user', UserValidation.create, async (req, res) => {
+    app.post('/scheduler', SchedulerValidation.create, async (req, res) => {
       try {
-        const result = await UserController.create(req.body);
+        const result = await SchedulerController.create(req.body);
         res.json(result);
       } catch (error) {
-        res.status(500).send(`Error creating user. ${error instanceof Error ? error.message : ''}`);
+        console.log(error);
+        res.status(500).send(`Error creating scheduler. ${error instanceof Error ? error.message : ''}`);
       }
     });
 
-    app.get('/user', async (__req, res) => {
+    app.get('/scheduler', async (__req, res) => {
       try {
-        const result = await UserController.list();
+        const result = await SchedulerController.list();
         res.json(result);
       } catch (error) {
-        res.status(500).send(`Error listing users. ${error instanceof Error ? error.message : ''}`);
+        res.status(500).send(`Error listing schedulers. ${error instanceof Error ? error.message : ''}`);
       }
     });
 
-    app.get('/user/:id', async (req, res) => {
+    app.get('/scheduler/:id', async (req, res) => {
       try {
-        const result = await UserController.find({ id: req.params.id });
+        const result = await SchedulerController.find(req.params.id);
         res.json(result);
       } catch (error) {
-        res.status(500).send(`Error listing users. ${error instanceof Error ? error.message : ''}`);
+        res.status(500).send(`Error listing scheduler. ${error instanceof Error ? error.message : ''}`);
       }
     });
 
-    app.put('/user/:id', async (req, res) => {
+    app.put('/scheduler/:id', async (req, res) => {
       try {
-        const result = await UserController.update(req.params.id, req.body);
+        const result = await SchedulerController.update(req.params.id, req.body);
         res.json(result);
       } catch (error) {
-        res.status(500).send(`Error updating user. ${error instanceof Error ? error.message : ''}`);
+        res.status(500).send(`Error updating scheduler. ${error instanceof Error ? error.message : ''}`);
       }
     });
 
-    app.delete('/user/:id', async (req, res) => {
+    app.delete('/scheduler/:id', async (req, res) => {
       try {
-        await UserController.delete(req.params.id);
+        await SchedulerController.delete(req.params.id);
         res.status(204).send();
       } catch (error) {
-        res.status(500).send(`Error deleting user. ${error instanceof Error ? error.message : ''}`);
+        res.status(500).send(`Error deleting scheduler. ${error instanceof Error ? error.message : ''}`);
       }
     });
   }

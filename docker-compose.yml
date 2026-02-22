@@ -7,7 +7,8 @@ services:
     working_dir: /var/www/app
     # environment:
     #   - NODE_ENV=production
-    # environment:
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     #   - DATABASE_URL=file:/var/www/app/backend/prisma/dev.db
     volumes:
       - .:/var/www/app

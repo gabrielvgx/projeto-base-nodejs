@@ -5,10 +5,19 @@ import { ErrorValidation } from './ErrorValidation.js';
 class SchedulerValidation {
   create = (req: Request, res: Response, next: NextFunction) => {
     try {
+      const productSchema = {
+        id: z.uuid(),
+        quantity: z.number().positive().int(),
+      };
+      const activitySchema = {
+        id: z.uuid(),
+      };
       const schema = {
-        email: z.email(),
-        name: z.string().min(5).max(255),
-        password: z.string().min(6).max(255),
+        customerId: z.uuid(),
+        professionalId: z.uuid().optional(),
+        scheduledAt: z.string(),
+        activities: z.array(z.object(activitySchema)),
+        products: z.array(z.object(productSchema)),
       };
       z.object(schema).parse(req.body);
       next();

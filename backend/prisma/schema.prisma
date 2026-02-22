@@ -66,7 +66,7 @@ model SchedulerItem {
   id String @id @default(uuid())
 
   schedulerId String
-  scheduler   Scheduler @relation(fields: [schedulerId], references: [id])
+  scheduler   Scheduler @relation("SchedulerItems", fields: [schedulerId], references: [id])
 
   activityId String?
   activity   Activity? @relation(fields: [activityId], references: [id])
@@ -79,7 +79,7 @@ model SchedulerItem {
   priceAtBooking Float?
   durationMinutes Int?
 
-  orderIndex Int?
+  orderIndex Int
 
   createdAt DateTime @default(now())
 }
@@ -101,7 +101,7 @@ model Scheduler {
   scheduledAt DateTime
   estimatedStartAt DateTime?
   estimatedEndAt   DateTime?
-  items SchedulerItem[]
+  items SchedulerItem[] @relation("SchedulerItems")
   status SchedulerStatus @default(pending)
   createdAt DateTime @default(now())
 }
