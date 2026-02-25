@@ -19,6 +19,7 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@prisma/generator-helper": "^7.4.1",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
