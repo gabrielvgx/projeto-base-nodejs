@@ -1,7 +1,8 @@
-import { Crypt } from '@utils';
+import { Crypt, HttpCode } from '@utils';
 import type { UserCreatePayload } from '@types';
 import { prisma } from '@db';
 import type { User } from '@prisma';
+import { AppError } from '@error';
 
 const userSelect = {
   id: true,
@@ -30,7 +31,10 @@ class UserService {
 
   async find(params: Partial<User>) {
     if (!params.id && !params.email) {
-      throw new Error('At least one of id or email must be provided to find a user.');
+      throw new AppError(
+        'At least one of id or email must be provided to find a user.',
+        HttpCode.BAD_REQUEST,
+      );
     }
     const { password, ...searchParams } = params;
     const user = await prisma.user.findFirst({
@@ -39,12 +43,16 @@ class UserService {
     });
     const { password: userPassword, ...userInfo } = user || {};
 
-    if (user && password && userPassword) {
+    if (!user) {
+      return null;
+    }
+    if (password && userPassword) {
       const isValidPassword = await Crypt.isValid(password, userPassword);
       if (!isValidPassword) {
-        throw new Error('Invalid credentials');
+        throw new AppError('Invalid credentials', HttpCode.UNAUTHORIZED);
       }
     }
+
     return userInfo;
   }
 

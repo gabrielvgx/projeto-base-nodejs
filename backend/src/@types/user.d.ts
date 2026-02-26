@@ -6,3 +6,10 @@ export type UserCreatePayload = {
   role: UserRole;
   password: string;
 };
+
+export type UserTokenInfo = {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+};

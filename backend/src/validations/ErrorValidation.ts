@@ -1,4 +1,5 @@
 import type { Response } from '@types';
+import { AppError } from 'error/AppError.js';
 import z, { ZodError } from 'zod';
 
 // type ErrorType = {
@@ -14,6 +15,11 @@ class ErrorValidation {
       res.status(400).json({
         message: 'Fail to validate parameters',
         errors: z.flattenError(err),
+      });
+    } else if (err instanceof AppError) {
+      res.status(err.statusCode).json({
+        message: err.message,
+        data: err.data,
       });
     } else {
       console.log(err);

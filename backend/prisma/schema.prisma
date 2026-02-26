@@ -19,14 +19,14 @@ enum Role {
 }
 
 model User {
-  id                     String      @id @default(uuid())
-  name                   String
-  email                  String      @unique
-  role                   Role        @default(customer)
-  password               String
-  customerSchedulers     Scheduler[] @relation("SchedulerCustomer")
-  professionalSchedulers Scheduler[] @relation("SchedulerProfessional")
-  createdAt              DateTime    @default(now())
+  id                       String                     @id @default(uuid())
+  name                     String
+  email                    String                     @unique
+  role                     Role                       @default(customer)
+  password                 String
+  customerSchedulers       Scheduler[]                @relation("SchedulerCustomer")
+  professionalSchedulers   Scheduler[]                @relation("SchedulerProfessional")
+  createdAt                DateTime                   @default(now())
   professionalAvailability ProfessionalAvailability[]
 }
 
@@ -34,7 +34,7 @@ model ProfessionalAvailability {
   id String @id @default(uuid())
 
   professionalId String
-  professional User @relation(fields: [professionalId], references: [id])
+  professional   User   @relation(fields: [professionalId], references: [id])
 
   weekday Int // 0-6 (domingo a sábado)
 
@@ -45,26 +45,28 @@ model ProfessionalAvailability {
 }
 
 model Activity {
-  id                       String   @id @default(uuid())
+  id                       String          @id @default(uuid())
   name                     String
   description              String?
-  estimatedPrice           Float    @default(0)
+  estimatedPrice           Float           @default(0)
   estimatedDurationMinutes Int
-  bookingLeadTimeMinutes   Int      @default(0)
-  bookingLeadDays          Int      @default(0)
+  bookingLeadTimeMinutes   Int             @default(0)
+  bookingLeadDays          Int             @default(0)
   schedulerItems           SchedulerItem[]
-  createdAt DateTime @default(now())
+  createdAt                DateTime        @default(now())
 }
 
 model Product {
-  id                String   @id @default(uuid())
-  name              String
-  description       String?
-  price             Float    @default(0)
-  estimatedMinPrice Float    @default(0)
-  estimatedMaxPrice Float    @default(0)
-  schedulerItems SchedulerItem[]
-  createdAt DateTime @default(now())
+  id                     String          @id @default(uuid())
+  name                   String
+  description            String?
+  price                  Float           @default(0)
+  estimatedMinPrice      Float           @default(0)
+  estimatedMaxPrice      Float           @default(0)
+  bookingLeadTimeMinutes Int             @default(0)
+  bookingLeadDays        Int             @default(0)
+  schedulerItems         SchedulerItem[]
+  createdAt              DateTime        @default(now())
 }
 
 model SchedulerItem {
@@ -81,7 +83,7 @@ model SchedulerItem {
 
   quantity Int @default(1)
 
-  priceAtBooking Float?
+  priceAtBooking  Float?
   durationMinutes Int?
 
   orderIndex Int
@@ -98,17 +100,15 @@ enum SchedulerStatus {
 }
 
 model Scheduler {
-  id String @id @default(uuid())
-  customerId String
-  customer User @relation("SchedulerCustomer", fields: [customerId], references: [id])
-  professionalId String?
-  professional User? @relation("SchedulerProfessional", fields: [professionalId], references: [id])
-  scheduledAt DateTime
+  id               String          @id @default(uuid())
+  customerId       String
+  customer         User            @relation("SchedulerCustomer", fields: [customerId], references: [id])
+  professionalId   String?
+  professional     User?           @relation("SchedulerProfessional", fields: [professionalId], references: [id])
+  scheduledAt      DateTime
   estimatedStartAt DateTime?
   estimatedEndAt   DateTime?
-  items SchedulerItem[] @relation("SchedulerItems")
-  status SchedulerStatus @default(pending)
-  createdAt DateTime @default(now())
+  items            SchedulerItem[] @relation("SchedulerItems")
+  status           SchedulerStatus @default(pending)
+  createdAt        DateTime        @default(now())
 }
-
-

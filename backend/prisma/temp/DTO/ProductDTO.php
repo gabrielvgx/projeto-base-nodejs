@@ -10,6 +10,8 @@ class ProductDTO
         public ?float $price = null,
         public ?float $estimatedMinPrice = null,
         public ?float $estimatedMaxPrice = null,
+        public ?int $bookingLeadTimeMinutes = null,
+        public ?int $bookingLeadDays = null,
         public ?\DateTimeImmutable $createdAt = null
     ) {}
 }

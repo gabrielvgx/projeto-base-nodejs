@@ -1,52 +1,36 @@
 import type { Application } from 'express';
 import { ProductValidation } from '@validations';
 import { ProductController } from '@controllers';
+import type { Request, Response } from '@types';
 
 class ProductRoute {
   register(app: Application) {
     app.post('/product', ProductValidation.create, async (req, res) => {
-      try {
-        const result = await ProductController.create(req.body);
-        res.json(result);
-      } catch (error) {
-        res.status(500).send(`Error creating user. ${error instanceof Error ? error.message : ''}`);
-      }
+      const result = await ProductController.create(req.body);
+      res.json(result);
     });
 
-    app.get('/product', async (__req, res) => {
-      try {
-        const result = await ProductController.list();
-        res.json(result);
-      } catch (error) {
-        res.status(500).send(`Error listing products. ${error instanceof Error ? error.message : ''}`);
-      }
+    app.get('/product', async (__req: Request, res: Response) => {
+      const result = await ProductController.list();
+      res.json(result);
     });
 
-    app.get('/product/:id', async (req, res) => {
-      try {
-        const result = await ProductController.find(req.params.id);
-        res.json(result);
-      } catch (error) {
-        res.status(500).send(`Error listing products. ${error instanceof Error ? error.message : ''}`);
-      }
+    app.get('/product/:id', async (req: Request, res: Response) => {
+      const id = req.params.id as string;
+      const result = await ProductController.find(id);
+      res.json(result);
     });
 
-    app.put('/product/:id', async (req, res) => {
-      try {
-        const result = await ProductController.update(req.params.id, req.body);
-        res.json(result);
-      } catch (error) {
-        res.status(500).send(`Error updating product. ${error instanceof Error ? error.message : ''}`);
-      }
+    app.put('/product/:id', async (req: Request, res: Response) => {
+      const id = req.params.id as string;
+      const result = await ProductController.update(id, req.body);
+      res.json(result);
     });
 
-    app.delete('/product/:id', async (req, res) => {
-      try {
-        await ProductController.delete(req.params.id);
-        res.status(204).send();
-      } catch (error) {
-        res.status(500).send(`Error deleting product. ${error instanceof Error ? error.message : ''}`);
-      }
+    app.delete('/product/:id', async (req: Request, res: Response) => {
+      const id = req.params.id as string;
+      await ProductController.delete(id);
+      res.status(204).send();
     });
   }
 }

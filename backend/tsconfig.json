@@ -41,6 +41,9 @@
       "@controllers": ["controllers/index.ts"],
       "@services": ["services/index.ts"],
       "@utils": ["utils/index.ts"],
+      "@error": ["error/index.ts"],
+      "@helper": ["helper/index.ts"],
+      "@logger": ["logger/index.ts"],
       "@prisma": ["generated/prisma/client.ts"]
     },
 

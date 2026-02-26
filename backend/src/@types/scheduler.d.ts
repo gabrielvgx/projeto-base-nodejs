@@ -17,3 +17,8 @@ export type SchedulerCreatePayload = {
   activities: ActivityItem[];
   products: ProductItem[];
 };
+
+export type LeadTimeConfig = {
+  leadTimeInMinutes?: number | undefined;
+  leadTimeInDays?: number | undefined;
+};

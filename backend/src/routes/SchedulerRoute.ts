@@ -1,53 +1,36 @@
 import { SchedulerController } from '@controllers';
 import type { Application } from 'express';
 import { SchedulerValidation } from '@validations';
+import type { Request, Response } from '@types';
 
 class SchedulerRoute {
   register(app: Application) {
     app.post('/scheduler', SchedulerValidation.create, async (req, res) => {
-      try {
-        const result = await SchedulerController.create(req.body);
-        res.json(result);
-      } catch (error) {
-        console.log(error);
-        res.status(500).send(`Error creating scheduler. ${error instanceof Error ? error.message : ''}`);
-      }
+      const result = await SchedulerController.create(req.body);
+      res.json(result);
     });
 
-    app.get('/scheduler', async (__req, res) => {
-      try {
-        const result = await SchedulerController.list();
-        res.json(result);
-      } catch (error) {
-        res.status(500).send(`Error listing schedulers. ${error instanceof Error ? error.message : ''}`);
-      }
+    app.get('/scheduler', async (__req: Request, res: Response) => {
+      const result = await SchedulerController.list();
+      res.json(result);
     });
 
-    app.get('/scheduler/:id', async (req, res) => {
-      try {
-        const result = await SchedulerController.find(req.params.id);
-        res.json(result);
-      } catch (error) {
-        res.status(500).send(`Error listing scheduler. ${error instanceof Error ? error.message : ''}`);
-      }
+    app.get('/scheduler/:id', async (req: Request, res: Response) => {
+      const id = req.params.id as string;
+      const result = await SchedulerController.find(id);
+      res.json(result);
     });
 
-    app.put('/scheduler/:id', async (req, res) => {
-      try {
-        const result = await SchedulerController.update(req.params.id, req.body);
-        res.json(result);
-      } catch (error) {
-        res.status(500).send(`Error updating scheduler. ${error instanceof Error ? error.message : ''}`);
-      }
+    app.put('/scheduler/:id', async (req: Request, res: Response) => {
+      const id = req.params.id as string;
+      const result = await SchedulerController.update(id, req.body);
+      res.json(result);
     });
 
-    app.delete('/scheduler/:id', async (req, res) => {
-      try {
-        await SchedulerController.delete(req.params.id);
-        res.status(204).send();
-      } catch (error) {
-        res.status(500).send(`Error deleting scheduler. ${error instanceof Error ? error.message : ''}`);
-      }
+    app.delete('/scheduler/:id', async (req: Request, res: Response) => {
+      const id = req.params.id as string;
+      await SchedulerController.delete(id);
+      res.status(204).send();
     });
   }
 }

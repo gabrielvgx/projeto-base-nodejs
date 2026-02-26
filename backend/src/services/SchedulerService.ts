@@ -1,7 +1,10 @@
-import type { SchedulerCreatePayload } from '@types';
+import type { Activity, Product, SchedulerCreatePayload } from '@types';
 import { prisma } from '@db';
 import { ProductService } from './ProductService.js';
 import { ActivityService } from './ActivityService.js';
+import { BookingLeadTimeHelper } from 'helper/BookingLeadTimeHelper.js';
+import { AppError } from 'error/AppError.js';
+import { HttpCode } from 'utils/HttpCode.js';
 
 const userSelect = {
   id: true,
@@ -14,7 +17,10 @@ class SchedulerService {
       products.map(async (product) => {
         const result = await ProductService.find(product.id);
         if (!result) {
-          throw new Error(`Product with id ${product.id} not found`);
+          throw new AppError(
+            `Product with id ${product.id} not found`,
+            HttpCode.NOT_FOUND,
+          );
         }
         return { ...result, quantity: product.quantity };
       }),
@@ -25,16 +31,57 @@ class SchedulerService {
       activities.map(async (activity) => {
         const result = await ActivityService.find(activity.id);
         if (!result) {
-          throw new Error(`Activity with id ${activity.id} not found`);
+          throw new AppError(
+            `Activity with id ${activity.id} not found`,
+            HttpCode.NOT_FOUND,
+          );
         }
         return result;
       }),
     );
   }
+  isValidItemsByLeadTime(
+    scheduledAt: Date,
+    schedulerItems: {
+      bookingLeadTimeMinutes?: number | undefined;
+      bookingLeadDays?: number | undefined;
+    }[],
+  ) {
+    const invalidItems = schedulerItems.filter((item) => {
+      return !BookingLeadTimeHelper.isValidLeadTime(scheduledAt, {
+        leadTimeInMinutes: item.bookingLeadTimeMinutes,
+        leadTimeInDays: item.bookingLeadDays,
+      });
+    });
+    return invalidItems;
+  }
   async create(scheduler: SchedulerCreatePayload) {
     const { customerId, professionalId, activities, products, scheduledAt } = scheduler;
+    if (customerId === professionalId) {
+      throw new AppError(
+        'Customer and professional cannot be the same user',
+        HttpCode.BAD_REQUEST,
+      );
+    }
     const activitiesList = await this.getActivitiesList(activities);
     const productsList = await this.getProductsList(products);
+    const items = [...activitiesList, ...productsList];
+    const invalidItems = this.isValidItemsByLeadTime(new Date(scheduledAt), items);
+    if (invalidItems.length > 0) {
+      throw new AppError(
+        `Some items do not meet the booking lead time requirements`,
+        HttpCode.BAD_REQUEST,
+        {
+          invalidItems: invalidItems.map((item) => ({
+            id: 'id' in item ? item.id : null,
+            name: 'name' in item ? item.name : null,
+            type: 'estimatedDurationMinutes' in item ? 'activity' : 'product',
+            bookingLeadTimeMinutes: item.bookingLeadTimeMinutes,
+            bookingLeadDays: item.bookingLeadDays,
+          })),
+        },
+      );
+    }
     const schedulerItems = [
       ...activitiesList.map((activity, orderIndex) => ({
         productId: null,

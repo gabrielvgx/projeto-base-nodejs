@@ -5,6 +5,8 @@ export type Product = {
   price?: number;
   estimatedMinPrice?: number;
   estimatedMaxPrice?: number;
+  bookingLeadTimeMinutes?: number;
+  bookingLeadDays?: number;
 };
 
 export type ProductCreatePayload = Omit<Product, 'id'>;

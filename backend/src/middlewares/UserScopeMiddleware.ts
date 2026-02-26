@@ -1,18 +1,30 @@
-import { JWT } from '@utils';
+import { HttpCode, JWT } from '@utils';
 import type { Request, Response, NextFunction } from '@types';
-import { RequestUtil } from '@utils';
+import { RequestUtil, ResponseUtil } from '@utils';
 import { UserRole } from '@validations';
+import { AppError } from '@error';
 
 class UserScopeMiddleware {
-  hasAccess = (req: Request, res: Response, next: NextFunction, allowedRoles: UserRole[]) => {
+  hasAccess = (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+    allowedRoles: UserRole[],
+  ) => {
     const token = RequestUtil.getToken(req);
     if (!token) {
-      res.status(401).json({ error: 'Unauthorized. No token provided.' });
+      ResponseUtil.handleError(
+        res,
+        new AppError('Unauthorized. No token provided.', HttpCode.UNAUTHORIZED),
+      );
       return;
     }
     const { role } = JWT.validate(token) || {};
     if (!allowedRoles.includes(role)) {
-      res.status(403).json({ error: 'Access denied. Insufficient permissions.' });
+      ResponseUtil.handleError(
+        res,
+        new AppError('Access denied. Insufficient permissions.', HttpCode.FORBIDDEN),
+      );
       return;
     }
     next();

@@ -1,6 +1,7 @@
 import { UserService } from '@services';
 import type { AuthCredentials } from '@types';
-import { JWT } from '@utils';
+import { HttpCode, JWT } from '@utils';
+import { AppError } from '@error';
 
 class AuthController {
   async authenticate(credentials: AuthCredentials) {
@@ -9,7 +10,7 @@ class AuthController {
       const token = JWT.generate({ user });
       return { token };
     }
-    throw new Error('Invalid credentials');
+    throw new AppError('Invalid credentials', HttpCode.UNAUTHORIZED);
   }
 }
 

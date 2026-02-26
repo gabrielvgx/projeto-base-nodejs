@@ -7,7 +7,7 @@ export default {
   endOfLine: 'lf',
   semi: true,
   tabWidth: 2,
-  printWidth: 120,
+  printWidth: 90,
   useTabs: false,
   quoteProps: 'as-needed',
   embeddedLanguageFormatting: 'off',

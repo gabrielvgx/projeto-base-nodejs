@@ -31,6 +31,12 @@ class ProductEntity
     #[ORM\Column(type: "float", nullable: false)]
     private float $estimatedMaxPrice;
 
+    #[ORM\Column(type: "integer", nullable: false)]
+    private int $bookingLeadTimeMinutes;
+
+    #[ORM\Column(type: "integer", nullable: false)]
+    private int $bookingLeadDays;
+
     #[ORM\Column(type: "datetime_immutable", nullable: false)]
     private \DateTimeImmutable $createdAt;
 
@@ -56,6 +62,12 @@ class ProductEntity
         }
         if ($dto->estimatedMaxPrice !== null) {
             $this->estimatedMaxPrice = $dto->estimatedMaxPrice;
+        }
+        if ($dto->bookingLeadTimeMinutes !== null) {
+            $this->bookingLeadTimeMinutes = $dto->bookingLeadTimeMinutes;
+        }
+        if ($dto->bookingLeadDays !== null) {
+            $this->bookingLeadDays = $dto->bookingLeadDays;
         }
         $this->createdAt = new \DateTimeImmutable();
     }
@@ -120,6 +132,26 @@ class ProductEntity
     public function setEstimatedMaxPrice(float $value): void
     {
         $this->estimatedMaxPrice = $value;
+    }
+
+    public function getBookingLeadTimeMinutes(): int
+    {
+        return $this->bookingLeadTimeMinutes;
+    }
+
+    public function setBookingLeadTimeMinutes(int $value): void
+    {
+        $this->bookingLeadTimeMinutes = $value;
+    }
+
+    public function getBookingLeadDays(): int
+    {
+        return $this->bookingLeadDays;
+    }
+
+    public function setBookingLeadDays(int $value): void
+    {
+        $this->bookingLeadDays = $value;
     }
 
     public function getSchedulerItems(): Collection
