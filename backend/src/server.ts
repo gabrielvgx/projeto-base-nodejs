@@ -1,9 +1,9 @@
 import './utils/Env.js';
 import express from 'express';
 import { Router } from './Router.js';
-import { MiddlewareManager } from '@middlewares';
+import { MiddlewareManager } from './MiddlewareManager.js';
 import { Logger } from '@logger';
-import { HttpCode, ResponseUtil } from '@utils';
+import { Env, HttpCode, ResponseUtil } from '@utils';
 import { AppError } from '@error';
 import type { Request, Response, NextFunction } from '@types';
 
@@ -43,6 +43,10 @@ Router.register(app).then(() => {
   app.use(errorHandler);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+if (Env.isDevelopment()) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;

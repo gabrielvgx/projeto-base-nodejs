@@ -5,7 +5,9 @@ const backendPath = path.dirname(path.join(process.argv[1] || '', '..'));
 
 class Env {
   constructor() {
-    dotenv.config({ path: path.join(backendPath, '.env') });
+    if (process.env.NODE_ENV !== 'production') {
+      dotenv.config({ path: path.join(backendPath, '.env') });
+    }
   }
 
   get(key: string, defaultValue: string | null = null): string {

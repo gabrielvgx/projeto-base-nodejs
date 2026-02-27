@@ -1,4 +1,4 @@
-import type { Activity, Product, SchedulerCreatePayload } from '@types';
+import type { SchedulerCreatePayload } from '@types';
 import { prisma } from '@db';
 import { ProductService } from './ProductService.js';
 import { ActivityService } from './ActivityService.js';

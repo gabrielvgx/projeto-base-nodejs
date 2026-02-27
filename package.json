@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": ".prettierrc.js",
+  "scripts": {
+    "vercel-build": "npm install --prefix backend && npm run db:generate --prefix backend && npm run build --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielvgx/projeto-base-nodejs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/gabrielvgx/projeto-base-nodejs/issues"
+  },
+  "homepage": "https://github.com/gabrielvgx/projeto-base-nodejs#readme"
+}
