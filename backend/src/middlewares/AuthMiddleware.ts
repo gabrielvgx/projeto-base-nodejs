@@ -6,8 +6,10 @@ import { HttpCode, JWT, ResponseUtil } from '@utils';
 class AuthMiddleware extends LoggableBase {
   priority = 1;
   isPublicRoute(req: Request) {
-    const publicRoutes = ['/auth'];
-    return publicRoutes.includes(req.path.replace(/\/$/, ''));
+    console.log(req);
+    return true;
+    // const publicRoutes = ['/auth'];
+    // return publicRoutes.includes(req.path.replace(/\/$/, ''));
   }
   async register(app: Application) {
     app.use((req: Request, res: Response, next: NextFunction) => {

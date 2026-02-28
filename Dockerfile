@@ -1,4 +1,5 @@
-FROM node:25-slim
+FROM node:24-slim
 
 RUN apt-get update -y && apt-get install -y openssl &&\
+    npm i -g vercel &&\
     apt-get clean && rm -rf /var/lib/apt/lists/*

@@ -21,8 +21,11 @@ async function generate(dir) {
   }
 
   // Recurse into subdirectories first
+  const ignoredDirs = ['src', 'api'];
   for (const d of dirs) {
-    await generate(join(dir, d));
+    if (!ignoredDirs.includes(d)) {
+      await generate(join(dir, d));
+    }
   }
 
   const exports = [];
@@ -41,8 +44,10 @@ async function generate(dir) {
   if (exports.length === 0) return;
 
   const content = exports.join('\n') + '\n';
-  await writeFile(join(dir, 'index.ts'), content, 'utf8');
-  console.log('Wrote', join(dir, 'index.ts'));
+  if (dir !== 'src' && !dir.includes('prisma')) {
+    await writeFile(join(dir, 'index.ts'), content, 'utf8');
+    console.log('Wrote', join(dir, 'index.ts'));
+  }
 }
 
 const target = process.argv[2] || 'src';
