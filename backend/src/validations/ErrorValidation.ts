@@ -1,5 +1,5 @@
 import type { Response } from '@types';
-import { AppError } from 'error/AppError.js';
+import { AppError } from '@error';
 import z, { ZodError } from 'zod';
 
 // type ErrorType = {

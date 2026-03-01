@@ -42,7 +42,6 @@ class UserScopeMiddleware {
       user: { role },
     } = tokenData;
     if (!allowedRoles.includes(role)) {
-      console.log(allowedRoles, role);
       ResponseUtil.handleError(
         res,
         new AppError('Access denied. Insufficient permissions.', HttpCode.FORBIDDEN),
@@ -54,12 +53,6 @@ class UserScopeMiddleware {
   adminOnly = () => {
     return (req: Request, res: Response, next: NextFunction) => {
       this.hasAccess(req, res, next, [UserRole.ADMIN]);
-    };
-  };
-
-  professionalOnly = () => {
-    return (req: Request, res: Response, next: NextFunction) => {
-      this.hasAccess(req, res, next, [UserRole.PROFESSIONAL]);
     };
   };
 

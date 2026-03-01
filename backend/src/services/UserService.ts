@@ -1,7 +1,7 @@
 import { Crypt, HttpCode } from '@utils';
 import type { UserCreatePayload } from '@types';
 import { prisma } from '@db';
-import type { User } from '@prisma';
+import type { User } from '../generated/prisma/client.js';
 import { AppError } from '@error';
 
 const userSelect = {

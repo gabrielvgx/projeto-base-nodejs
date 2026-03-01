@@ -1,4 +1,3 @@
-import type { Activity } from './activity.js';
 import type { Product } from './product.js';
 
 export type ProductItem = {
@@ -6,15 +5,9 @@ export type ProductItem = {
   quantity: number;
 };
 
-export type ActivityItem = {
-  id: Activity['id'];
-};
-
 export type SchedulerCreatePayload = {
   customerId: string;
-  professionalId?: string;
   scheduledAt: string;
-  activities: ActivityItem[];
   products: ProductItem[];
 };
 

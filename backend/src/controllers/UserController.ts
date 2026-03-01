@@ -1,6 +1,6 @@
 import { UserService } from '@services';
 import type { UserCreatePayload } from '@types';
-import type { User } from '@prisma';
+import type { User } from '../generated/prisma/client.js';
 
 class UserController {
   async create(user: UserCreatePayload) {

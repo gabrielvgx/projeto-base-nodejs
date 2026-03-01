@@ -19,9 +19,6 @@ class SchedulerEntity
     #[ORM\Column(type: "string", nullable: false)]
     private string $customerId;
 
-    #[ORM\Column(type: "string", nullable: true)]
-    private string $professionalId;
-
     #[ORM\Column(type: "datetime_immutable", nullable: false)]
     private \DateTimeImmutable $scheduledAt;
 
@@ -41,9 +38,6 @@ class SchedulerEntity
     #[ORM\ManyToOne(targetEntity: UserEntity::class)]
     private ?UserEntity $customer = null;
 
-    #[ORM\ManyToOne(targetEntity: UserEntity::class)]
-    private ?UserEntity $professional = null;
-
     #[ORM\OneToMany(mappedBy: "", targetEntity: SchedulerItemEntity::class)]
     private Collection $items;
 
@@ -53,9 +47,6 @@ class SchedulerEntity
         $this->id = \Symfony\Component\Uid\Uuid::v7()->toRfc4122();
         if ($dto->customerId !== null) {
             $this->customerId = $dto->customerId;
-        }
-        if ($dto->professionalId !== null) {
-            $this->professionalId = $dto->professionalId;
         }
         if ($dto->scheduledAt !== null) {
             $this->scheduledAt = $dto->scheduledAt;
@@ -102,26 +93,6 @@ class SchedulerEntity
     public function setCustomer(UserEntity $value): void
     {
         $this->customer = $value;
-    }
-
-    public function getProfessionalId(): string
-    {
-        return $this->professionalId;
-    }
-
-    public function setProfessionalId(string $value): void
-    {
-        $this->professionalId = $value;
-    }
-
-    public function getProfessional(): UserEntity
-    {
-        return $this->professional;
-    }
-
-    public function setProfessional(UserEntity $value): void
-    {
-        $this->professional = $value;
     }
 
     public function getScheduledAt(): \DateTimeImmutable

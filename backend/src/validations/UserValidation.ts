@@ -5,7 +5,6 @@ import { ErrorValidation } from './ErrorValidation.js';
 export enum UserRole {
   ADMIN = 'admin',
   CUSTOMER = 'customer',
-  PROFESSIONAL = 'professional',
 }
 
 class UserValidation {

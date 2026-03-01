@@ -1,4 +1,3 @@
-export * from './ActivityController.js';
 export * from './AuthController.js';
 export * from './ProductController.js';
 export * from './SchedulerController.js';

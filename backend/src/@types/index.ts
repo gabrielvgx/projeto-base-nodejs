@@ -1,4 +1,3 @@
-export * from './activity.d.js';
 export * from './auth.d.js';
 export * from './logger.d.js';
 export * from './product.d.js';

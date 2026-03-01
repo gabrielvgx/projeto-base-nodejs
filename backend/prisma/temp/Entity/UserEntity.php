@@ -35,12 +35,6 @@ class UserEntity
     #[ORM\OneToMany(mappedBy: "", targetEntity: SchedulerEntity::class)]
     private Collection $customerSchedulers;
 
-    #[ORM\OneToMany(mappedBy: "", targetEntity: SchedulerEntity::class)]
-    private Collection $professionalSchedulers;
-
-    #[ORM\OneToMany(mappedBy: "", targetEntity: ProfessionalAvailabilityEntity::class)]
-    private Collection $professionalAvailability;
-
 
     public function __construct(UserDTO $dto = new UserDTO())
     {
@@ -92,12 +86,12 @@ class UserEntity
         $this->email = $value;
     }
 
-    public function getRole(): Role
+    public function getRole(): UserRole
     {
         return $this->role;
     }
 
-    public function setRole(Role $value): void
+    public function setRole(UserRole $value): void
     {
         $this->role = $value;
     }
@@ -122,16 +116,6 @@ class UserEntity
         $this->customerSchedulers = $value;
     }
 
-    public function getProfessionalSchedulers(): Collection
-    {
-        return $this->professionalSchedulers;
-    }
-
-    public function setProfessionalSchedulers(Collection $value): void
-    {
-        $this->professionalSchedulers = $value;
-    }
-
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
@@ -140,16 +124,6 @@ class UserEntity
     public function setCreatedAt(\DateTimeImmutable $value): void
     {
         $this->createdAt = $value;
-    }
-
-    public function getProfessionalAvailability(): Collection
-    {
-        return $this->professionalAvailability;
-    }
-
-    public function setProfessionalAvailability(Collection $value): void
-    {
-        $this->professionalAvailability = $value;
     }
 
 }
