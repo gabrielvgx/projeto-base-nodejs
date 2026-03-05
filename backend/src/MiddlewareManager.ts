@@ -4,11 +4,29 @@ import * as middlewares from '@middlewares';
 class MiddlewareManager {
   async register(app: Application) {
     const { ...allMiddlewares } = middlewares;
-    Object.values(allMiddlewares).forEach((middleware) => {
-      if ('register' in middleware) {
-        middleware.register(app);
-      }
-    });
+    Object.values(allMiddlewares)
+      .sort((a: any, b: any) => {
+        const priorityA = a?.priority ?? 0;
+        const priorityB = b?.priority ?? 0;
+        const invalidA = priorityA === undefined || priorityA === null;
+        const invalidB = priorityB === undefined || priorityB === null;
+        let result = 0;
+
+        if (invalidA && invalidB) return 0;
+        if (!invalidA && !invalidB) {
+          if (priorityA === priorityB) return 0;
+          if (priorityA < priorityB) return -1;
+          return 1;
+        }
+        if (invalidA) return 1;
+        if (invalidB) return -1;
+        return result;
+      })
+      .forEach((middleware) => {
+        if ('register' in middleware) {
+          middleware.register(app);
+        }
+      });
   }
 }
 

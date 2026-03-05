@@ -10,7 +10,7 @@ class ProductRoute {
     router.use('/product', UserScopeMiddleware.adminOnly());
     router.post('/product', ProductValidation.create, async (req, res) => {
       const result = await ProductController.create(req.body);
-      res.json(result);
+      res.status(201).json(result);
     });
 
     router.get('/product', async (__req: Request, res: Response) => {

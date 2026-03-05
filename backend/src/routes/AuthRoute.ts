@@ -1,9 +1,10 @@
 import { AuthController } from '@controllers';
 import type { Application } from 'express';
+import { AuthValidation } from '@validations';
 
 class AuthRoute {
   register(app: Application) {
-    app.post('/auth', async (req, res) => {
+    app.post('/auth', AuthValidation.auth(), async (req, res) => {
       const result = await AuthController.authenticate(req.body);
       res.json(result);
     });

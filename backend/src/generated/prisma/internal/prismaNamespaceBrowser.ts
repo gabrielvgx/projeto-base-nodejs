@@ -52,6 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Category: 'Category',
+  ProductCategory: 'ProductCategory',
   Product: 'Product',
   SchedulerItem: 'SchedulerItem',
   Scheduler: 'Scheduler'
@@ -82,15 +84,41 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  isActive: 'isActive',
+  orderIndex: 'orderIndex',
+  parentId: 'parentId',
+  createdAt: 'createdAt'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const ProductCategoryScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt'
+} as const
+
+export type ProductCategoryScalarFieldEnum = (typeof ProductCategoryScalarFieldEnum)[keyof typeof ProductCategoryScalarFieldEnum]
+
+
 export const ProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  slug: 'slug',
   description: 'description',
   price: 'price',
   estimatedMinPrice: 'estimatedMinPrice',
   estimatedMaxPrice: 'estimatedMaxPrice',
   bookingLeadTimeMinutes: 'bookingLeadTimeMinutes',
   bookingLeadDays: 'bookingLeadDays',
+  isActive: 'isActive',
   createdAt: 'createdAt'
 } as const
 

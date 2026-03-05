@@ -5,3 +5,5 @@ export * from './JWT.js';
 export * from './RegexPattern.js';
 export * from './RequestUtil.js';
 export * from './ResponseUtil.js';
+export * from './SMTP.js';
+export * from './Text.js';

@@ -17,3 +17,7 @@ services:
     restart: always
     # command: node backend/dist/server.js
     command: 'tail -f /dev/null'
+  dev:
+    image: debian:12
+    container_name: dev
+    tty: true

@@ -2,8 +2,8 @@ import type { ProductCreatePayload } from '@types';
 import { ProductService } from '@services';
 
 class ProductController {
-  async create(user: ProductCreatePayload) {
-    const result = await ProductService.create(user);
+  async create(product: ProductCreatePayload) {
+    const result = await ProductService.create(product);
     return result;
   }
   list() {

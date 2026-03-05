@@ -45,36 +45,42 @@ export type ProductSumAggregateOutputType = {
 export type ProductMinAggregateOutputType = {
   id: string | null
   name: string | null
+  slug: string | null
   description: string | null
   price: number | null
   estimatedMinPrice: number | null
   estimatedMaxPrice: number | null
   bookingLeadTimeMinutes: number | null
   bookingLeadDays: number | null
+  isActive: boolean | null
   createdAt: Date | null
 }
 
 export type ProductMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  slug: string | null
   description: string | null
   price: number | null
   estimatedMinPrice: number | null
   estimatedMaxPrice: number | null
   bookingLeadTimeMinutes: number | null
   bookingLeadDays: number | null
+  isActive: boolean | null
   createdAt: Date | null
 }
 
 export type ProductCountAggregateOutputType = {
   id: number
   name: number
+  slug: number
   description: number
   price: number
   estimatedMinPrice: number
   estimatedMaxPrice: number
   bookingLeadTimeMinutes: number
   bookingLeadDays: number
+  isActive: number
   createdAt: number
   _all: number
 }
@@ -99,36 +105,42 @@ export type ProductSumAggregateInputType = {
 export type ProductMinAggregateInputType = {
   id?: true
   name?: true
+  slug?: true
   description?: true
   price?: true
   estimatedMinPrice?: true
   estimatedMaxPrice?: true
   bookingLeadTimeMinutes?: true
   bookingLeadDays?: true
+  isActive?: true
   createdAt?: true
 }
 
 export type ProductMaxAggregateInputType = {
   id?: true
   name?: true
+  slug?: true
   description?: true
   price?: true
   estimatedMinPrice?: true
   estimatedMaxPrice?: true
   bookingLeadTimeMinutes?: true
   bookingLeadDays?: true
+  isActive?: true
   createdAt?: true
 }
 
 export type ProductCountAggregateInputType = {
   id?: true
   name?: true
+  slug?: true
   description?: true
   price?: true
   estimatedMinPrice?: true
   estimatedMaxPrice?: true
   bookingLeadTimeMinutes?: true
   bookingLeadDays?: true
+  isActive?: true
   createdAt?: true
   _all?: true
 }
@@ -222,12 +234,14 @@ export type ProductGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type ProductGroupByOutputType = {
   id: string
   name: string
+  slug: string
   description: string | null
   price: number
   estimatedMinPrice: number
   estimatedMaxPrice: number
   bookingLeadTimeMinutes: number
   bookingLeadDays: number
+  isActive: boolean
   createdAt: Date
   _count: ProductCountAggregateOutputType | null
   _avg: ProductAvgAggregateOutputType | null
@@ -257,31 +271,38 @@ export type ProductWhereInput = {
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   id?: Prisma.StringFilter<"Product"> | string
   name?: Prisma.StringFilter<"Product"> | string
+  slug?: Prisma.StringFilter<"Product"> | string
   description?: Prisma.StringNullableFilter<"Product"> | string | null
   price?: Prisma.FloatFilter<"Product"> | number
   estimatedMinPrice?: Prisma.FloatFilter<"Product"> | number
   estimatedMaxPrice?: Prisma.FloatFilter<"Product"> | number
   bookingLeadTimeMinutes?: Prisma.IntFilter<"Product"> | number
   bookingLeadDays?: Prisma.IntFilter<"Product"> | number
+  isActive?: Prisma.BoolFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
+  categories?: Prisma.ProductCategoryListRelationFilter
   schedulerItems?: Prisma.SchedulerItemListRelationFilter
 }
 
 export type ProductOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   estimatedMinPrice?: Prisma.SortOrder
   estimatedMaxPrice?: Prisma.SortOrder
   bookingLeadTimeMinutes?: Prisma.SortOrder
   bookingLeadDays?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  categories?: Prisma.ProductCategoryOrderByRelationAggregateInput
   schedulerItems?: Prisma.SchedulerItemOrderByRelationAggregateInput
 }
 
 export type ProductWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  slug?: string
   AND?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   OR?: Prisma.ProductWhereInput[]
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
@@ -292,19 +313,23 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   estimatedMaxPrice?: Prisma.FloatFilter<"Product"> | number
   bookingLeadTimeMinutes?: Prisma.IntFilter<"Product"> | number
   bookingLeadDays?: Prisma.IntFilter<"Product"> | number
+  isActive?: Prisma.BoolFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
+  categories?: Prisma.ProductCategoryListRelationFilter
   schedulerItems?: Prisma.SchedulerItemListRelationFilter
-}, "id">
+}, "id" | "slug">
 
 export type ProductOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   estimatedMinPrice?: Prisma.SortOrder
   estimatedMaxPrice?: Prisma.SortOrder
   bookingLeadTimeMinutes?: Prisma.SortOrder
   bookingLeadDays?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ProductCountOrderByAggregateInput
   _avg?: Prisma.ProductAvgOrderByAggregateInput
@@ -319,112 +344,139 @@ export type ProductScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProductScalarWhereWithAggregatesInput | Prisma.ProductScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Product"> | string
   name?: Prisma.StringWithAggregatesFilter<"Product"> | string
+  slug?: Prisma.StringWithAggregatesFilter<"Product"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   price?: Prisma.FloatWithAggregatesFilter<"Product"> | number
   estimatedMinPrice?: Prisma.FloatWithAggregatesFilter<"Product"> | number
   estimatedMaxPrice?: Prisma.FloatWithAggregatesFilter<"Product"> | number
   bookingLeadTimeMinutes?: Prisma.IntWithAggregatesFilter<"Product"> | number
   bookingLeadDays?: Prisma.IntWithAggregatesFilter<"Product"> | number
+  isActive?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
 }
 
 export type ProductCreateInput = {
   id?: string
   name: string
+  slug: string
   description?: string | null
   price?: number
   estimatedMinPrice?: number
   estimatedMaxPrice?: number
   bookingLeadTimeMinutes?: number
   bookingLeadDays?: number
+  isActive?: boolean
   createdAt?: Date | string
+  categories?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
   schedulerItems?: Prisma.SchedulerItemCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateInput = {
   id?: string
   name: string
+  slug: string
   description?: string | null
   price?: number
   estimatedMinPrice?: number
   estimatedMaxPrice?: number
   bookingLeadTimeMinutes?: number
   bookingLeadDays?: number
+  isActive?: boolean
   createdAt?: Date | string
+  categories?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
   schedulerItems?: Prisma.SchedulerItemUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMinPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMaxPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   bookingLeadTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   bookingLeadDays?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
   schedulerItems?: Prisma.SchedulerItemUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMinPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMaxPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   bookingLeadTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   bookingLeadDays?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
   schedulerItems?: Prisma.SchedulerItemUncheckedUpdateManyWithoutProductNestedInput
 }
 
 export type ProductCreateManyInput = {
   id?: string
   name: string
+  slug: string
   description?: string | null
   price?: number
   estimatedMinPrice?: number
   estimatedMaxPrice?: number
   bookingLeadTimeMinutes?: number
   bookingLeadDays?: number
+  isActive?: boolean
   createdAt?: Date | string
 }
 
 export type ProductUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMinPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMaxPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   bookingLeadTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   bookingLeadDays?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProductUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMinPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMaxPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   bookingLeadTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   bookingLeadDays?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProductScalarRelationFilter = {
+  is?: Prisma.ProductWhereInput
+  isNot?: Prisma.ProductWhereInput
 }
 
 export type ProductCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   estimatedMinPrice?: Prisma.SortOrder
   estimatedMaxPrice?: Prisma.SortOrder
   bookingLeadTimeMinutes?: Prisma.SortOrder
   bookingLeadDays?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -439,24 +491,28 @@ export type ProductAvgOrderByAggregateInput = {
 export type ProductMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   estimatedMinPrice?: Prisma.SortOrder
   estimatedMaxPrice?: Prisma.SortOrder
   bookingLeadTimeMinutes?: Prisma.SortOrder
   bookingLeadDays?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type ProductMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   estimatedMinPrice?: Prisma.SortOrder
   estimatedMaxPrice?: Prisma.SortOrder
   bookingLeadTimeMinutes?: Prisma.SortOrder
   bookingLeadDays?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -473,19 +529,21 @@ export type ProductNullableScalarRelationFilter = {
   isNot?: Prisma.ProductWhereInput | null
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type ProductCreateNestedOneWithoutCategoriesInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutCategoriesInput, Prisma.ProductUncheckedCreateWithoutCategoriesInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutCategoriesInput
+  connect?: Prisma.ProductWhereUniqueInput
+}
+
+export type ProductUpdateOneRequiredWithoutCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductCreateWithoutCategoriesInput, Prisma.ProductUncheckedCreateWithoutCategoriesInput>
+  connectOrCreate?: Prisma.ProductCreateOrConnectWithoutCategoriesInput
+  upsert?: Prisma.ProductUpsertWithoutCategoriesInput
+  connect?: Prisma.ProductWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutCategoriesInput, Prisma.ProductUpdateWithoutCategoriesInput>, Prisma.ProductUncheckedUpdateWithoutCategoriesInput>
 }
 
 export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
   decrement?: number
@@ -509,28 +567,110 @@ export type ProductUpdateOneWithoutSchedulerItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductUpdateToOneWithWhereWithoutSchedulerItemsInput, Prisma.ProductUpdateWithoutSchedulerItemsInput>, Prisma.ProductUncheckedUpdateWithoutSchedulerItemsInput>
 }
 
-export type ProductCreateWithoutSchedulerItemsInput = {
+export type ProductCreateWithoutCategoriesInput = {
   id?: string
   name: string
+  slug: string
   description?: string | null
   price?: number
   estimatedMinPrice?: number
   estimatedMaxPrice?: number
   bookingLeadTimeMinutes?: number
   bookingLeadDays?: number
+  isActive?: boolean
   createdAt?: Date | string
+  schedulerItems?: Prisma.SchedulerItemCreateNestedManyWithoutProductInput
+}
+
+export type ProductUncheckedCreateWithoutCategoriesInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  price?: number
+  estimatedMinPrice?: number
+  estimatedMaxPrice?: number
+  bookingLeadTimeMinutes?: number
+  bookingLeadDays?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  schedulerItems?: Prisma.SchedulerItemUncheckedCreateNestedManyWithoutProductInput
+}
+
+export type ProductCreateOrConnectWithoutCategoriesInput = {
+  where: Prisma.ProductWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductCreateWithoutCategoriesInput, Prisma.ProductUncheckedCreateWithoutCategoriesInput>
+}
+
+export type ProductUpsertWithoutCategoriesInput = {
+  update: Prisma.XOR<Prisma.ProductUpdateWithoutCategoriesInput, Prisma.ProductUncheckedUpdateWithoutCategoriesInput>
+  create: Prisma.XOR<Prisma.ProductCreateWithoutCategoriesInput, Prisma.ProductUncheckedCreateWithoutCategoriesInput>
+  where?: Prisma.ProductWhereInput
+}
+
+export type ProductUpdateToOneWithWhereWithoutCategoriesInput = {
+  where?: Prisma.ProductWhereInput
+  data: Prisma.XOR<Prisma.ProductUpdateWithoutCategoriesInput, Prisma.ProductUncheckedUpdateWithoutCategoriesInput>
+}
+
+export type ProductUpdateWithoutCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  estimatedMinPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  estimatedMaxPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  bookingLeadTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  bookingLeadDays?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedulerItems?: Prisma.SchedulerItemUpdateManyWithoutProductNestedInput
+}
+
+export type ProductUncheckedUpdateWithoutCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  estimatedMinPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  estimatedMaxPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  bookingLeadTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  bookingLeadDays?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  schedulerItems?: Prisma.SchedulerItemUncheckedUpdateManyWithoutProductNestedInput
+}
+
+export type ProductCreateWithoutSchedulerItemsInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  price?: number
+  estimatedMinPrice?: number
+  estimatedMaxPrice?: number
+  bookingLeadTimeMinutes?: number
+  bookingLeadDays?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  categories?: Prisma.ProductCategoryCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutSchedulerItemsInput = {
   id?: string
   name: string
+  slug: string
   description?: string | null
   price?: number
   estimatedMinPrice?: number
   estimatedMaxPrice?: number
   bookingLeadTimeMinutes?: number
   bookingLeadDays?: number
+  isActive?: boolean
   createdAt?: Date | string
+  categories?: Prisma.ProductCategoryUncheckedCreateNestedManyWithoutProductInput
 }
 
 export type ProductCreateOrConnectWithoutSchedulerItemsInput = {
@@ -552,25 +692,31 @@ export type ProductUpdateToOneWithWhereWithoutSchedulerItemsInput = {
 export type ProductUpdateWithoutSchedulerItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMinPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMaxPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   bookingLeadTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   bookingLeadDays?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.ProductCategoryUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutSchedulerItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMinPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   estimatedMaxPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   bookingLeadTimeMinutes?: Prisma.IntFieldUpdateOperationsInput | number
   bookingLeadDays?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.ProductCategoryUncheckedUpdateManyWithoutProductNestedInput
 }
 
 
@@ -579,10 +725,12 @@ export type ProductUncheckedUpdateWithoutSchedulerItemsInput = {
  */
 
 export type ProductCountOutputType = {
+  categories: number
   schedulerItems: number
 }
 
 export type ProductCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  categories?: boolean | ProductCountOutputTypeCountCategoriesArgs
   schedulerItems?: boolean | ProductCountOutputTypeCountSchedulerItemsArgs
 }
 
@@ -599,6 +747,13 @@ export type ProductCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * ProductCountOutputType without action
  */
+export type ProductCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProductCategoryWhereInput
+}
+
+/**
+ * ProductCountOutputType without action
+ */
 export type ProductCountOutputTypeCountSchedulerItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SchedulerItemWhereInput
 }
@@ -607,13 +762,16 @@ export type ProductCountOutputTypeCountSchedulerItemsArgs<ExtArgs extends runtim
 export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  slug?: boolean
   description?: boolean
   price?: boolean
   estimatedMinPrice?: boolean
   estimatedMaxPrice?: boolean
   bookingLeadTimeMinutes?: boolean
   bookingLeadDays?: boolean
+  isActive?: boolean
   createdAt?: boolean
+  categories?: boolean | Prisma.Product$categoriesArgs<ExtArgs>
   schedulerItems?: boolean | Prisma.Product$schedulerItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["product"]>
@@ -621,41 +779,48 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  slug?: boolean
   description?: boolean
   price?: boolean
   estimatedMinPrice?: boolean
   estimatedMaxPrice?: boolean
   bookingLeadTimeMinutes?: boolean
   bookingLeadDays?: boolean
+  isActive?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["product"]>
 
 export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  slug?: boolean
   description?: boolean
   price?: boolean
   estimatedMinPrice?: boolean
   estimatedMaxPrice?: boolean
   bookingLeadTimeMinutes?: boolean
   bookingLeadDays?: boolean
+  isActive?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["product"]>
 
 export type ProductSelectScalar = {
   id?: boolean
   name?: boolean
+  slug?: boolean
   description?: boolean
   price?: boolean
   estimatedMinPrice?: boolean
   estimatedMaxPrice?: boolean
   bookingLeadTimeMinutes?: boolean
   bookingLeadDays?: boolean
+  isActive?: boolean
   createdAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "estimatedMinPrice" | "estimatedMaxPrice" | "bookingLeadTimeMinutes" | "bookingLeadDays" | "createdAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "description" | "price" | "estimatedMinPrice" | "estimatedMaxPrice" | "bookingLeadTimeMinutes" | "bookingLeadDays" | "isActive" | "createdAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  categories?: boolean | Prisma.Product$categoriesArgs<ExtArgs>
   schedulerItems?: boolean | Prisma.Product$schedulerItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -665,17 +830,20 @@ export type ProductIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Product"
   objects: {
+    categories: Prisma.$ProductCategoryPayload<ExtArgs>[]
     schedulerItems: Prisma.$SchedulerItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    slug: string
     description: string | null
     price: number
     estimatedMinPrice: number
     estimatedMaxPrice: number
     bookingLeadTimeMinutes: number
     bookingLeadDays: number
+    isActive: boolean
     createdAt: Date
   }, ExtArgs["result"]["product"]>
   composites: {}
@@ -1071,6 +1239,7 @@ readonly fields: ProductFieldRefs;
  */
 export interface Prisma__ProductClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  categories<T extends Prisma.Product$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   schedulerItems<T extends Prisma.Product$schedulerItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$schedulerItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SchedulerItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1103,12 +1272,14 @@ export interface Prisma__ProductClient<T, Null = never, ExtArgs extends runtime.
 export interface ProductFieldRefs {
   readonly id: Prisma.FieldRef<"Product", 'String'>
   readonly name: Prisma.FieldRef<"Product", 'String'>
+  readonly slug: Prisma.FieldRef<"Product", 'String'>
   readonly description: Prisma.FieldRef<"Product", 'String'>
   readonly price: Prisma.FieldRef<"Product", 'Float'>
   readonly estimatedMinPrice: Prisma.FieldRef<"Product", 'Float'>
   readonly estimatedMaxPrice: Prisma.FieldRef<"Product", 'Float'>
   readonly bookingLeadTimeMinutes: Prisma.FieldRef<"Product", 'Int'>
   readonly bookingLeadDays: Prisma.FieldRef<"Product", 'Int'>
+  readonly isActive: Prisma.FieldRef<"Product", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Product", 'DateTime'>
 }
     
@@ -1493,6 +1664,30 @@ export type ProductDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Products to delete.
    */
   limit?: number
+}
+
+/**
+ * Product.categories
+ */
+export type Product$categoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProductCategory
+   */
+  select?: Prisma.ProductCategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProductCategory
+   */
+  omit?: Prisma.ProductCategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductCategoryInclude<ExtArgs> | null
+  where?: Prisma.ProductCategoryWhereInput
+  orderBy?: Prisma.ProductCategoryOrderByWithRelationInput | Prisma.ProductCategoryOrderByWithRelationInput[]
+  cursor?: Prisma.ProductCategoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProductCategoryScalarFieldEnum | Prisma.ProductCategoryScalarFieldEnum[]
 }
 
 /**

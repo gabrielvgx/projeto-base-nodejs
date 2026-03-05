@@ -142,3 +142,5 @@ vite.config.ts.timestamp-*
 
 *.db
 .vercel
+temp/*
+!temp/README.md

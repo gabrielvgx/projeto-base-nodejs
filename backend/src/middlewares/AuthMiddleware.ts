@@ -6,7 +6,7 @@ import { HttpCode, JWT, ResponseUtil } from '@utils';
 class AuthMiddleware extends LoggableBase {
   priority = 1;
   isPublicRoute(req: Request) {
-    console.log(req);
+    // console.log(req);
     return true;
     // const publicRoutes = ['/auth'];
     // return publicRoutes.includes(req.path.replace(/\/$/, ''));

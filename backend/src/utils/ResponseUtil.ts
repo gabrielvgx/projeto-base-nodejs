@@ -1,12 +1,16 @@
 import type { Response } from '@types';
 import { AppError } from '@error';
 
+type SuccessResponse = {
+  statusCode?: number;
+  message?: string;
+  data?: Record<string, any>;
+};
+
 class ResponseUtil {
-  handleSuccess(data: any, message: string = 'Success') {
-    return {
-      message,
-      data,
-    };
+  handleSuccess(res: Response, responseData: SuccessResponse = {}) {
+    const { statusCode = 200, message = 'Success', data = {} } = responseData;
+    res.status(statusCode).send({ message, data });
   }
 
   handleError(res: Response, err: unknown) {

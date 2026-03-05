@@ -1,4 +1,3 @@
-import './utils/Env.js';
 import express from 'express';
 // import { Logger } from '@logger';
 import { Env, HttpCode, ResponseUtil } from '@utils';
@@ -6,9 +5,8 @@ import { Router } from './Router.js';
 import { MiddlewareManager } from './MiddlewareManager.js';
 import { AppError } from '@error';
 import type { Request, Response, NextFunction } from '@types';
-
 const app = express();
-const PORT = 3000;
+const PORT = parseInt(Env.get('SRV_PORT', '3000'));
 // const logger = new Logger('Server');
 
 app.get('/', (_req, res) => {

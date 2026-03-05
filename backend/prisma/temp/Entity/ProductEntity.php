@@ -19,6 +19,9 @@ class ProductEntity
     #[ORM\Column(type: "string", nullable: false)]
     private string $name;
 
+    #[ORM\Column(type: "string", nullable: false)]
+    private string $slug;
+
     #[ORM\Column(type: "string", nullable: true)]
     private string $description;
 
@@ -37,9 +40,15 @@ class ProductEntity
     #[ORM\Column(type: "integer", nullable: false)]
     private int $bookingLeadDays;
 
+    #[ORM\Column(type: "boolean", nullable: false)]
+    private bool $isActive;
+
     #[ORM\Column(type: "datetime_immutable", nullable: false)]
     private \DateTimeImmutable $createdAt;
 
+
+    #[ORM\OneToMany(mappedBy: "", targetEntity: ProductCategoryEntity::class)]
+    private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: "", targetEntity: SchedulerItemEntity::class)]
     private Collection $schedulerItems;
@@ -50,6 +59,9 @@ class ProductEntity
         $this->id = \Symfony\Component\Uid\Uuid::v7()->toRfc4122();
         if ($dto->name !== null) {
             $this->name = $dto->name;
+        }
+        if ($dto->slug !== null) {
+            $this->slug = $dto->slug;
         }
         if ($dto->description !== null) {
             $this->description = $dto->description;
@@ -68,6 +80,9 @@ class ProductEntity
         }
         if ($dto->bookingLeadDays !== null) {
             $this->bookingLeadDays = $dto->bookingLeadDays;
+        }
+        if ($dto->isActive !== null) {
+            $this->isActive = $dto->isActive;
         }
         $this->createdAt = new \DateTimeImmutable();
     }
@@ -92,6 +107,16 @@ class ProductEntity
     public function setName(string $value): void
     {
         $this->name = $value;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $value): void
+    {
+        $this->slug = $value;
     }
 
     public function getDescription(): string
@@ -152,6 +177,26 @@ class ProductEntity
     public function setBookingLeadDays(int $value): void
     {
         $this->bookingLeadDays = $value;
+    }
+
+    public function getIsActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $value): void
+    {
+        $this->isActive = $value;
+    }
+
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(Collection $value): void
+    {
+        $this->categories = $value;
     }
 
     public function getSchedulerItems(): Collection

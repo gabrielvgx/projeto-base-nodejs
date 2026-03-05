@@ -2,18 +2,15 @@
 
 namespace App\DTO;
 
-class ProductDTO
+class CategoryDTO
 {
     public function __construct(
         public ?string $name = null,
         public ?string $slug = null,
         public ?string $description = null,
-        public ?float $price = null,
-        public ?float $estimatedMinPrice = null,
-        public ?float $estimatedMaxPrice = null,
-        public ?int $bookingLeadTimeMinutes = null,
-        public ?int $bookingLeadDays = null,
         public ?bool $isActive = null,
+        public ?int $orderIndex = null,
+        public ?string $parentId = null,
         public ?\DateTimeImmutable $createdAt = null
     ) {}
 }

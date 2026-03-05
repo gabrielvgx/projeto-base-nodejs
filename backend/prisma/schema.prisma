@@ -18,26 +18,69 @@ enum UserRole {
 }
 
 model User {
-  id                       String                     @id @default(uuid())
-  name                     String
-  email                    String                     @unique
-  role                     UserRole                   @default(customer)
-  password                 String
-  customerSchedulers       Scheduler[]                @relation("SchedulerCustomer")
-  createdAt                DateTime                   @default(now())
+  id                 String      @id @default(uuid())
+  name               String
+  email              String      @unique
+  role               UserRole    @default(customer)
+  password           String
+  customerSchedulers Scheduler[] @relation("SchedulerCustomer")
+  createdAt          DateTime    @default(now())
+}
+
+model Category {
+  id          String  @id @default(uuid())
+  name        String
+  slug        String  @unique
+  description String?
+  isActive    Boolean @default(true)
+  orderIndex  Int     @default(0)
+
+  parentId String?
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryHierarchy")
+
+  products ProductCategory[]
+
+  createdAt DateTime @default(now())
+
+  @@index([parentId])
+  @@index([isActive])
+}
+
+model ProductCategory {
+  id String @id @default(uuid())
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([productId, categoryId])
+  @@index([categoryId])
+  @@index([productId])
 }
 
 model Product {
-  id                     String          @id @default(uuid())
+  id                     String  @id @default(uuid())
   name                   String
+  slug                   String  @unique
   description            String?
-  price                  Float           @default(0)
-  estimatedMinPrice      Float           @default(0)
-  estimatedMaxPrice      Float           @default(0)
-  bookingLeadTimeMinutes Int             @default(0)
-  bookingLeadDays        Int             @default(0)
-  schedulerItems         SchedulerItem[]
-  createdAt              DateTime        @default(now())
+  price                  Float   @default(0)
+  estimatedMinPrice      Float   @default(0)
+  estimatedMaxPrice      Float   @default(0)
+  bookingLeadTimeMinutes Int     @default(0)
+  bookingLeadDays        Int     @default(0)
+  isActive               Boolean @default(true)
+
+  categories     ProductCategory[]
+  schedulerItems SchedulerItem[]
+
+  createdAt DateTime @default(now())
+
+  @@index([isActive])
 }
 
 model SchedulerItem {

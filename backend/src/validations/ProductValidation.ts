@@ -11,6 +11,8 @@ class ProductValidation {
         price: z.optional(z.number().min(0)),
         estimatedMinPrice: z.optional(z.number().min(0)),
         estimatedMaxPrice: z.optional(z.number().min(0)),
+        bookingLeadTimeMinutes: z.optional(z.number().int().min(0)),
+        bookingLeadDays: z.optional(z.number().int().min(0)),
       };
       z.object(schema).parse(req.body);
       next();

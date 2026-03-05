@@ -43,7 +43,8 @@
       "@utils": ["utils/index.ts"],
       "@error": ["error/index.ts"],
       "@helper": ["helper/index.ts"],
-      "@logger": ["logger/index.ts"]
+      "@logger": ["logger/index.ts"],
+      "@templates": ["templates/index.ts"]
     },
 
     "typeRoots": ["./node_modules/@types", "./src/@types"]
