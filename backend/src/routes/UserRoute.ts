@@ -13,7 +13,7 @@ class UserRoute {
       UserValidation.create,
       async (req: Request, res: Response) => {
         const result = await UserController.create(req.body);
-        res.json(result);
+        res.status(201).json(result);
       },
     );
 
@@ -32,11 +32,17 @@ class UserRoute {
       async (req: Request, res: Response) => {
         const id = req.params.id as string;
         const result = await UserController.find({ id });
+        if (result === null) {
+          res.status(404).json({
+            message: 'User not found',
+          });
+          return;
+        }
         res.json(result);
       },
     );
 
-    router.put(
+    router.patch(
       '/user/:id',
       UserScopeMiddleware.onlyAdminOrSameUser(),
       async (req: Request, res: Response) => {

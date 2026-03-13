@@ -59,7 +59,10 @@ const errorHandler = (err: Error, req: Request, res: Response, _next: NextFuncti
   };
   // logger.error(`${req.method} ${req.path}: ${errorMessage}`);
 
-  return ResponseUtil.handleError(res, new AppError(errorMessage, statusCode, errorData));
+  return ResponseUtil.handleError(
+    res,
+    new AppError(errorMessage, statusCode, errorData, err),
+  );
 };
 
 app.use(notFoundHandler);

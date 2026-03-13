@@ -7,11 +7,15 @@ import { UserScopeMiddleware } from '@middlewares';
 class ProductRoute {
   register(app: Application) {
     const router = Router();
-    router.use('/product', UserScopeMiddleware.adminOnly());
-    router.post('/product', ProductValidation.create, async (req, res) => {
-      const result = await ProductController.create(req.body);
-      res.status(201).json(result);
-    });
+    router.post(
+      '/product',
+      UserScopeMiddleware.adminOnly(),
+      ProductValidation.create(),
+      async (req, res) => {
+        const result = await ProductController.create(req.body);
+        res.status(201).json(result);
+      },
+    );
 
     router.get('/product', async (__req: Request, res: Response) => {
       const result = await ProductController.list();
@@ -24,17 +28,28 @@ class ProductRoute {
       res.json(result);
     });
 
-    router.put('/product/:id', async (req: Request, res: Response) => {
-      const id = req.params.id as string;
-      const result = await ProductController.update(id, req.body);
-      res.json(result);
-    });
+    router.patch(
+      '/product/:id',
+      UserScopeMiddleware.adminOnly(),
+      ProductValidation.update(),
+      async (req: Request, res: Response) => {
+        console.log('updating product...');
+        const id = req.params.id as string;
+        const result = await ProductController.update(id, req.body);
+        console.log('updated product...');
+        res.json(result);
+      },
+    );
 
-    router.delete('/product/:id', async (req: Request, res: Response) => {
-      const id = req.params.id as string;
-      await ProductController.delete(id);
-      res.status(204).send();
-    });
+    router.delete(
+      '/product/:id',
+      UserScopeMiddleware.adminOnly(),
+      async (req: Request, res: Response) => {
+        const id = req.params.id as string;
+        await ProductController.delete(id);
+        res.status(204).send();
+      },
+    );
 
     app.use(router);
   }

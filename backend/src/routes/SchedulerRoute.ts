@@ -22,7 +22,7 @@ class SchedulerRoute {
       res.json(result);
     });
 
-    router.put('/scheduler/:id', async (req: Request, res: Response) => {
+    router.patch('/scheduler/:id', async (req: Request, res: Response) => {
       const id = req.params.id as string;
       const result = await SchedulerController.update(id, req.body);
       res.json(result);

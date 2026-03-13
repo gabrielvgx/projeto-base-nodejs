@@ -8,7 +8,6 @@ import { AppError } from '@error';
 import path from 'node:path';
 
 // 🔐 CONFIG
-const EMAIL = Env.get('MAIL_FROM');
 const CLIENT_ID = Env.get('MAIL_ID');
 const CLIENT_SECRET = Env.get('MAIL_SECRET');
 const REDIRECT_URI = `http://localhost:${Env.get('SRV_PORT') || 3000}/debug/gmail/oauth2callback`;

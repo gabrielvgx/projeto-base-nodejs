@@ -1,5 +1,7 @@
 import type { Response } from '@types';
 import { AppError } from '@error';
+import { Prisma } from 'generated/prisma/client.js';
+import { PrismaError } from './PrismaError.js';
 
 type SuccessResponse = {
   statusCode?: number;
@@ -15,6 +17,24 @@ class ResponseUtil {
 
   handleError(res: Response, err: unknown) {
     if (err instanceof AppError) {
+      if (err.originalError instanceof Prisma.PrismaClientKnownRequestError) {
+        const customError = PrismaError.get(err.originalError.code, {
+          resource: err.originalError.meta?.modelName,
+        });
+        if (customError) {
+          res.status(customError.responseStatus).json({
+            message: customError.message,
+            errors: {
+              orm: {
+                cause: err.originalError.cause,
+                originalMessage: err.originalError.message,
+                meta: err.originalError.meta,
+              },
+            },
+          });
+          return;
+        }
+      }
       res.status(err.statusCode).json({
         message: err.message,
         data: err.data || null,

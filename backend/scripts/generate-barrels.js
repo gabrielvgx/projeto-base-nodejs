@@ -21,7 +21,7 @@ async function generate(dir) {
   }
 
   // Recurse into subdirectories first
-  const ignoredDirs = ['src', 'api'];
+  const ignoredDirs = ['src', 'api', 'generated'];
   for (const d of dirs) {
     if (!ignoredDirs.includes(d)) {
       await generate(join(dir, d));
