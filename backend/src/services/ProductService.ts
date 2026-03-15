@@ -1,10 +1,14 @@
 import { prisma } from '@db';
 import type { ProductCreatePayload } from '@types';
+import { Text } from '@utils';
 
 class ProductService {
   async create(product: ProductCreatePayload) {
     const createdProduct = await prisma.product.create({
-      data: product,
+      data: {
+        ...product,
+        slug: Text.generateSlug(product.name),
+      },
     });
 
     return createdProduct;

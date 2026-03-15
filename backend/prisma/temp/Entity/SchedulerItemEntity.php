@@ -20,9 +20,6 @@ class SchedulerItemEntity
     private string $schedulerId;
 
     #[ORM\Column(type: "string", nullable: true)]
-    private string $activityId;
-
-    #[ORM\Column(type: "string", nullable: true)]
     private string $productId;
 
     #[ORM\Column(type: "integer", nullable: false)]
@@ -44,9 +41,6 @@ class SchedulerItemEntity
     #[ORM\ManyToOne(targetEntity: SchedulerEntity::class)]
     private ?SchedulerEntity $scheduler = null;
 
-    #[ORM\ManyToOne(targetEntity: ActivityEntity::class)]
-    private ?ActivityEntity $activity = null;
-
     #[ORM\ManyToOne(targetEntity: ProductEntity::class)]
     private ?ProductEntity $product = null;
 
@@ -56,9 +50,6 @@ class SchedulerItemEntity
         $this->id = \Symfony\Component\Uid\Uuid::v7()->toRfc4122();
         if ($dto->schedulerId !== null) {
             $this->schedulerId = $dto->schedulerId;
-        }
-        if ($dto->activityId !== null) {
-            $this->activityId = $dto->activityId;
         }
         if ($dto->productId !== null) {
             $this->productId = $dto->productId;
@@ -108,26 +99,6 @@ class SchedulerItemEntity
     public function setScheduler(SchedulerEntity $value): void
     {
         $this->scheduler = $value;
-    }
-
-    public function getActivityId(): string
-    {
-        return $this->activityId;
-    }
-
-    public function setActivityId(string $value): void
-    {
-        $this->activityId = $value;
-    }
-
-    public function getActivity(): ActivityEntity
-    {
-        return $this->activity;
-    }
-
-    public function setActivity(ActivityEntity $value): void
-    {
-        $this->activity = $value;
     }
 
     public function getProductId(): string

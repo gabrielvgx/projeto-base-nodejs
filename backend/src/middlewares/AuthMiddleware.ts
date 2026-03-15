@@ -2,12 +2,36 @@ import { AppError } from '@error';
 import { LoggableBase } from '@logger';
 import type { Request, Response, NextFunction, Application } from '@types';
 import { HttpCode, JWT, ResponseUtil } from '@utils';
+import z from 'zod';
 
 class AuthMiddleware extends LoggableBase {
   priority = 1;
   isPublicRoute(req: Request) {
-    const publicRoutes = ['/auth'];
-    return publicRoutes.includes(req.path.replace(/\/$/, ''));
+    const publicRoutes = [
+      '/auth',
+      '/product',
+      '/product/:id',
+      '/debug/gmail/oauth2callback',
+      '/user/forgot-password',
+      '/user/forgot-password/validate-otp',
+    ];
+    const cleanedPath = req.path.replace(/\/$/, '');
+    const [basePath, uuid = ''] = cleanedPath.split('/').slice(1);
+    const { success: hasUUID } = z.safeParse(
+      z.object({
+        uuid: z.uuid(),
+      }),
+      { uuid },
+    );
+    return publicRoutes.some((publicRoute) => {
+      const isEqualSimpleRoute = publicRoute === cleanedPath;
+      const isEqualDynamicRoute =
+        publicRoute.includes(':id') &&
+        hasUUID &&
+        publicRoute.replace('/:id', '') === `/${basePath}`;
+
+      return isEqualSimpleRoute || isEqualDynamicRoute;
+    });
   }
   async register(app: Application) {
     app.use((req: Request, res: Response, next: NextFunction) => {

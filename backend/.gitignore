@@ -138,6 +138,9 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-/src/generated/prisma
+# /src/generated/prisma
 
 *.db
+.vercel
+temp/*
+!temp/README.md

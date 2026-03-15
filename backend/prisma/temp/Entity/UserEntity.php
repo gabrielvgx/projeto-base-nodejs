@@ -28,18 +28,15 @@ class UserEntity
     #[ORM\Column(type: "string", nullable: false)]
     private string $password;
 
+    #[ORM\Column(type: "string", nullable: true)]
+    private string $otpSecret;
+
     #[ORM\Column(type: "datetime_immutable", nullable: false)]
     private \DateTimeImmutable $createdAt;
 
 
     #[ORM\OneToMany(mappedBy: "", targetEntity: SchedulerEntity::class)]
     private Collection $customerSchedulers;
-
-    #[ORM\OneToMany(mappedBy: "", targetEntity: SchedulerEntity::class)]
-    private Collection $professionalSchedulers;
-
-    #[ORM\OneToMany(mappedBy: "", targetEntity: ProfessionalAvailabilityEntity::class)]
-    private Collection $professionalAvailability;
 
 
     public function __construct(UserDTO $dto = new UserDTO())
@@ -56,6 +53,9 @@ class UserEntity
         }
         if ($dto->password !== null) {
             $this->password = $dto->password;
+        }
+        if ($dto->otpSecret !== null) {
+            $this->otpSecret = $dto->otpSecret;
         }
         $this->createdAt = new \DateTimeImmutable();
     }
@@ -92,12 +92,12 @@ class UserEntity
         $this->email = $value;
     }
 
-    public function getRole(): Role
+    public function getRole(): UserRole
     {
         return $this->role;
     }
 
-    public function setRole(Role $value): void
+    public function setRole(UserRole $value): void
     {
         $this->role = $value;
     }
@@ -112,6 +112,16 @@ class UserEntity
         $this->password = $value;
     }
 
+    public function getOtpSecret(): string
+    {
+        return $this->otpSecret;
+    }
+
+    public function setOtpSecret(string $value): void
+    {
+        $this->otpSecret = $value;
+    }
+
     public function getCustomerSchedulers(): Collection
     {
         return $this->customerSchedulers;
@@ -122,16 +132,6 @@ class UserEntity
         $this->customerSchedulers = $value;
     }
 
-    public function getProfessionalSchedulers(): Collection
-    {
-        return $this->professionalSchedulers;
-    }
-
-    public function setProfessionalSchedulers(Collection $value): void
-    {
-        $this->professionalSchedulers = $value;
-    }
-
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
@@ -140,16 +140,6 @@ class UserEntity
     public function setCreatedAt(\DateTimeImmutable $value): void
     {
         $this->createdAt = $value;
-    }
-
-    public function getProfessionalAvailability(): Collection
-    {
-        return $this->professionalAvailability;
-    }
-
-    public function setProfessionalAvailability(Collection $value): void
-    {
-        $this->professionalAvailability = $value;
     }
 
 }

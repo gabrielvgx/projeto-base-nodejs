@@ -1,37 +1,56 @@
-import type { Application } from 'express';
+import { Router, type Application } from 'express';
 import { ProductValidation } from '@validations';
 import { ProductController } from '@controllers';
 import type { Request, Response } from '@types';
+import { UserScopeMiddleware } from '@middlewares';
 
 class ProductRoute {
   register(app: Application) {
-    app.post('/product', ProductValidation.create, async (req, res) => {
-      const result = await ProductController.create(req.body);
-      res.json(result);
-    });
+    const router = Router();
+    router.post(
+      '/product',
+      UserScopeMiddleware.adminOnly(),
+      ProductValidation.create(),
+      async (req, res) => {
+        const result = await ProductController.create(req.body);
+        res.status(201).json(result);
+      },
+    );
 
-    app.get('/product', async (__req: Request, res: Response) => {
+    router.get('/product', async (__req: Request, res: Response) => {
       const result = await ProductController.list();
       res.json(result);
     });
 
-    app.get('/product/:id', async (req: Request, res: Response) => {
+    router.get('/product/:id', async (req: Request, res: Response) => {
       const id = req.params.id as string;
       const result = await ProductController.find(id);
       res.json(result);
     });
 
-    app.put('/product/:id', async (req: Request, res: Response) => {
-      const id = req.params.id as string;
-      const result = await ProductController.update(id, req.body);
-      res.json(result);
-    });
+    router.patch(
+      '/product/:id',
+      UserScopeMiddleware.adminOnly(),
+      ProductValidation.update(),
+      async (req: Request, res: Response) => {
+        const id = req.params.id as string;
+        const result = await ProductController.update(id, req.body);
 
-    app.delete('/product/:id', async (req: Request, res: Response) => {
-      const id = req.params.id as string;
-      await ProductController.delete(id);
-      res.status(204).send();
-    });
+        res.json(result);
+      },
+    );
+
+    router.delete(
+      '/product/:id',
+      UserScopeMiddleware.adminOnly(),
+      async (req: Request, res: Response) => {
+        const id = req.params.id as string;
+        await ProductController.delete(id);
+        res.status(204).send();
+      },
+    );
+
+    app.use(router);
   }
 }
 

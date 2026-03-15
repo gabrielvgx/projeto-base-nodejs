@@ -1,8 +1,11 @@
-import { Crypt, HttpCode } from '@utils';
+import ms from 'ms';
+import { Crypt, HttpCode, OTPUtil, SMTP } from '@utils';
 import type { UserCreatePayload } from '@types';
 import { prisma } from '@db';
-import type { User } from '@prisma';
+import type { User } from '../generated/prisma/client.js';
 import { AppError } from '@error';
+import { OTPTemplate } from '@templates';
+import type { UserSelect } from '../generated/prisma/models.js';
 
 const userSelect = {
   id: true,
@@ -29,7 +32,7 @@ class UserService {
     return createdUser;
   }
 
-  async find(params: Partial<User>) {
+  async find(params: Partial<User>, customSelect: UserSelect = {}) {
     if (!params.id && !params.email) {
       throw new AppError(
         'At least one of id or email must be provided to find a user.',
@@ -39,13 +42,13 @@ class UserService {
     const { password, ...searchParams } = params;
     const user = await prisma.user.findFirst({
       where: searchParams,
-      select: { ...userSelect, password: !!password },
+      select: { ...userSelect, ...customSelect, password: !!password },
     });
-    const { password: userPassword, ...userInfo } = user || {};
-
     if (!user) {
       return null;
     }
+    const { password: userPassword, ...userInfo } = user;
+
     if (password && userPassword) {
       const isValidPassword = await Crypt.isValid(password, userPassword);
       if (!isValidPassword) {
@@ -86,6 +89,32 @@ class UserService {
       select: userSelect,
     });
     return updatedUser;
+  }
+  async updateOTPSecret(userId: string, otpSecret: string) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { otpSecret },
+      select: userSelect,
+    });
+  }
+  async forgotPassword(email: string) {
+    const user = await this.find({ email });
+    if (!user) {
+      throw new AppError('User not found', HttpCode.NOT_FOUND);
+    }
+    const secret = OTPUtil.generateSecret();
+
+    await this.updateOTPSecret(user.id, secret);
+    const otp = OTPUtil.generate(secret, ms('5m'));
+    console.log(`OTP: ${otp}`);
+
+    const { template, attachments } = OTPTemplate.buildOTP(otp);
+    await SMTP.sendMail({
+      body: template,
+      subject: `${otp} - Código de recuperação de senha`,
+      to: user.email,
+      attachments,
+    });
   }
 }
 

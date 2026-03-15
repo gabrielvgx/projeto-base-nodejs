@@ -6,7 +6,6 @@ class SchedulerItemDTO
 {
     public function __construct(
         public ?string $schedulerId = null,
-        public ?string $activityId = null,
         public ?string $productId = null,
         public ?int $quantity = null,
         public ?float $priceAtBooking = null,

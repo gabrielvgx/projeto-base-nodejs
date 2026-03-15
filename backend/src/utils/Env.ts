@@ -1,11 +1,14 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
+import os from 'node:os';
 
 const backendPath = path.dirname(path.join(process.argv[1] || '', '..'));
 
 class Env {
   constructor() {
-    dotenv.config({ path: path.join(backendPath, '.env') });
+    if (process.env.NODE_ENV !== 'production') {
+      dotenv.config({ path: path.join(backendPath, '.env') });
+    }
   }
 
   get(key: string, defaultValue: string | null = null): string {
@@ -19,6 +22,15 @@ class Env {
 
   isProduction(): boolean {
     return this.get('NODE_ENV') === 'production';
+  }
+
+  getTempDir(): string {
+    if (this.isDevelopment()) return path.join(backendPath, 'temp');
+    return os.tmpdir();
+  }
+
+  getBackendPath() {
+    return backendPath;
   }
 }
 

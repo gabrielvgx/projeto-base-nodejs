@@ -7,66 +7,85 @@ datasource db {
   provider = "sqlite"
 }
 
+// datasource db {
+//   provider = "postgresql"
+// }
+
 generator doctrine {
   provider = "node ./scripts/prisma-generator/index.js"
   output   = "./temp"
 }
 
-enum Role {
-  customer
+enum UserRole {
   admin
-  professional
+  customer
 }
 
 model User {
-  id                       String                     @id @default(uuid())
-  name                     String
-  email                    String                     @unique
-  role                     Role                       @default(customer)
-  password                 String
-  customerSchedulers       Scheduler[]                @relation("SchedulerCustomer")
-  professionalSchedulers   Scheduler[]                @relation("SchedulerProfessional")
-  createdAt                DateTime                   @default(now())
-  professionalAvailability ProfessionalAvailability[]
+  id                 String      @id @default(uuid())
+  name               String
+  email              String      @unique
+  role               UserRole    @default(customer)
+  password           String
+  otpSecret          String?
+  customerSchedulers Scheduler[] @relation("SchedulerCustomer")
+  createdAt          DateTime    @default(now())
 }
 
-model ProfessionalAvailability {
-  id String @id @default(uuid())
+model Category {
+  id          String  @id @default(uuid())
+  name        String
+  slug        String  @unique
+  description String?
+  isActive    Boolean @default(true)
+  orderIndex  Int     @default(0)
 
-  professionalId String
-  professional   User   @relation(fields: [professionalId], references: [id])
+  parentId String?
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryHierarchy")
 
-  weekday Int // 0-6 (domingo a sábado)
-
-  startMinutes Int
-  endMinutes   Int
+  products ProductCategory[]
 
   createdAt DateTime @default(now())
+
+  @@index([parentId])
+  @@index([isActive])
 }
 
-model Activity {
-  id                       String          @id @default(uuid())
-  name                     String
-  description              String?
-  estimatedPrice           Float           @default(0)
-  estimatedDurationMinutes Int
-  bookingLeadTimeMinutes   Int             @default(0)
-  bookingLeadDays          Int             @default(0)
-  schedulerItems           SchedulerItem[]
-  createdAt                DateTime        @default(now())
+model ProductCategory {
+  id String @id @default(uuid())
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([productId, categoryId])
+  @@index([categoryId])
+  @@index([productId])
 }
 
 model Product {
-  id                     String          @id @default(uuid())
+  id                     String  @id @default(uuid())
   name                   String
+  slug                   String  @unique
   description            String?
-  price                  Float           @default(0)
-  estimatedMinPrice      Float           @default(0)
-  estimatedMaxPrice      Float           @default(0)
-  bookingLeadTimeMinutes Int             @default(0)
-  bookingLeadDays        Int             @default(0)
-  schedulerItems         SchedulerItem[]
-  createdAt              DateTime        @default(now())
+  price                  Float   @default(0)
+  estimatedMinPrice      Float   @default(0)
+  estimatedMaxPrice      Float   @default(0)
+  bookingLeadTimeMinutes Int     @default(0)
+  bookingLeadDays        Int     @default(0)
+  isActive               Boolean @default(true)
+
+  categories     ProductCategory[]
+  schedulerItems SchedulerItem[]
+
+  createdAt DateTime @default(now())
+
+  @@index([isActive])
 }
 
 model SchedulerItem {
@@ -74,9 +93,6 @@ model SchedulerItem {
 
   schedulerId String
   scheduler   Scheduler @relation("SchedulerItems", fields: [schedulerId], references: [id])
-
-  activityId String?
-  activity   Activity? @relation(fields: [activityId], references: [id])
 
   productId String?
   product   Product? @relation(fields: [productId], references: [id])
@@ -103,8 +119,6 @@ model Scheduler {
   id               String          @id @default(uuid())
   customerId       String
   customer         User            @relation("SchedulerCustomer", fields: [customerId], references: [id])
-  professionalId   String?
-  professional     User?           @relation("SchedulerProfessional", fields: [professionalId], references: [id])
   scheduledAt      DateTime
   estimatedStartAt DateTime?
   estimatedEndAt   DateTime?
