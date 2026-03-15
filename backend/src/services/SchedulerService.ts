@@ -4,6 +4,7 @@ import { ProductService } from './ProductService.js';
 import { BookingLeadTimeHelper } from '@helper';
 import { AppError } from '@error';
 import { HttpCode } from '@utils';
+import type { SchedulerWhereInput } from '../generated/prisma/models.js';
 
 const userSelect = {
   id: true,
@@ -119,7 +120,8 @@ class SchedulerService {
     return scheduler;
   }
 
-  async list() {
+  async list(filter?: SchedulerWhereInput) {
+    const where = filter ? filter : {};
     const schedulers = await prisma.scheduler.findMany({
       include: {
         items: {
@@ -146,6 +148,7 @@ class SchedulerService {
       omit: {
         customerId: true,
       },
+      where,
     });
     return schedulers;
   }

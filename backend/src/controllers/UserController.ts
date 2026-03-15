@@ -33,6 +33,9 @@ class UserController {
 
     return OTPUtil.verify(otp, user.otpSecret, ms('5m'));
   }
+  async resetPassword(email: string, newPassword: string) {
+    await UserService.updatePassword(email, newPassword);
+  }
 }
 
 const instance = new UserController();

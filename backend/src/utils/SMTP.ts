@@ -2,6 +2,8 @@ import nodemailer from 'nodemailer';
 import type { TransportOptions, SendMailOptions } from 'nodemailer';
 import { google } from 'googleapis';
 import type { Attachment } from 'nodemailer/lib/mailer/index.js';
+import { AppError } from '@error';
+import { HttpCode } from './HttpCode.js';
 
 export type SMTPOpts = {
   subject: string;
@@ -11,7 +13,26 @@ export type SMTPOpts = {
 };
 
 class SMTP {
-  async createTransporter() {
+  async createGenericTransporter() {
+    const {
+      SMTP_HOST: host,
+      SMTP_PORT: port,
+      SMTP_USER: user,
+      SMTP_PASS: pass,
+      SMTP_SECURE: secure,
+    } = process.env;
+
+    const auth = user && pass ? { user, pass } : undefined;
+
+    const transporter = nodemailer.createTransport({
+      host,
+      port: Number(port),
+      secure: secure === 'true',
+      auth,
+    });
+    return transporter;
+  }
+  async createGmailTransporter() {
     const {
       MAIL_ID: clientId,
       MAIL_SECRET: clientSecret,
@@ -54,6 +75,15 @@ class SMTP {
     }
   }
 
+  async createTransporter() {
+    switch (process.env.MAIL_PROVIDER) {
+      case 'GMAIL':
+        return this.createGmailTransporter();
+      default:
+        return this.createGenericTransporter();
+    }
+  }
+
   async sendMail({ body, subject, to, attachments = [] }: SMTPOpts) {
     const { MAIL_FROM } = process.env;
 
@@ -66,7 +96,7 @@ class SMTP {
         attachments,
       };
 
-      let emailTransporter = await this.createTransporter();
+      const emailTransporter = await this.createTransporter();
       await emailTransporter.sendMail(mailOptions);
     } catch (err) {
       if (err instanceof Error) {

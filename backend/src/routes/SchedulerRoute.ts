@@ -1,7 +1,8 @@
 import { SchedulerController } from '@controllers';
 import { Router, type Application } from 'express';
-import { SchedulerValidation } from '@validations';
+import { SchedulerValidation, UserRole } from '@validations';
 import type { Request, Response } from '@types';
+import type { SchedulerWhereInput } from '../generated/prisma/models.js';
 
 class SchedulerRoute {
   register(app: Application) {
@@ -11,8 +12,11 @@ class SchedulerRoute {
       res.json(result);
     });
 
-    router.get('/scheduler', async (__req: Request, res: Response) => {
-      const result = await SchedulerController.list();
+    router.get('/scheduler', async (req: Request, res: Response) => {
+      const customerId = req.user?.id || '';
+      const isAdmin = req.user?.role === UserRole.ADMIN;
+      const filter: SchedulerWhereInput = isAdmin ? {} : { customerId };
+      const result = await SchedulerController.list(filter);
       res.json(result);
     });
 

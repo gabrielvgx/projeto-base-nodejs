@@ -116,6 +116,13 @@ class UserService {
       attachments,
     });
   }
+  async updatePassword(email: string, newPassword: string) {
+    const password = await Crypt.encrypt(newPassword);
+    await prisma.user.update({
+      where: { email },
+      data: { password },
+    });
+  }
 }
 
 const instance = new UserService();

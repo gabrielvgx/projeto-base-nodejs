@@ -17,7 +17,15 @@ services:
     restart: always
     # command: node backend/dist/server.js
     command: 'tail -f /dev/null'
+    depends_on:
+      - mailsandbox
   dev:
     image: debian:12
     container_name: dev
     tty: true
+  mailsandbox:
+    container_name: mailsandbox
+    image: mailhog/mailhog
+    ports:
+      - '1025:1025'
+      - '8025:8025'

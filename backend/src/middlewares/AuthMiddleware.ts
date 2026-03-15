@@ -58,6 +58,9 @@ class AuthMiddleware extends LoggableBase {
       try {
         const decoded = JWT.validate(token);
         (req as any).user = decoded.user;
+        if (decoded.operation) {
+          (req as any).operation = decoded.operation;
+        }
         next();
       } catch (err) {
         return ResponseUtil.handleError(

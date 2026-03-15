@@ -80,13 +80,40 @@ class UserRoute {
         const isValid = await UserController.validateOTP(params);
         if (isValid) {
           const token = JWT.generate({
-            email: params.email,
+            user: { email: params.email },
             operation: 'RESET_PASSWORD',
           });
           res.status(200).json({ token });
         } else {
           res.status(400).send({
             message: 'INVALID_OTP_OR_EXPIRED',
+          });
+        }
+      },
+    );
+
+    app.post(
+      '/user/reset-password',
+      UserValidation.resetPassword(),
+      async (req: Request, res) => {
+        try {
+          const email = req.user ? req.user.email : null;
+          const isValid = email && req.operation === 'RESET_PASSWORD';
+          if (isValid) {
+            const { newPassword } = req.body;
+            await UserController.resetPassword(email, newPassword);
+            res.status(204).json();
+            return;
+          }
+          res.status(400).json({
+            message: 'Invalid token for password reset',
+          });
+        } catch (error: any) {
+          res.status(500).json({
+            message: error.message || 'Unexpected error',
+            errors: {
+              error,
+            },
           });
         }
       },

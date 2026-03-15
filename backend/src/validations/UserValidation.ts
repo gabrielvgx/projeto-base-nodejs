@@ -7,6 +7,14 @@ export enum UserRole {
   CUSTOMER = 'customer',
 }
 
+const passwordValidation = z
+  .string()
+  .min(6, { error: 'Password must contain at least 6 characters.' })
+  .max(255, { error: 'Password cannot exceed 255 characters.' })
+  .regex(/^(?=.*[a-z])(?=.*\d).+$/g, {
+    error: 'Password requires 1 lowercase letter and 1 digit.',
+  });
+
 class UserValidation {
   create = () => {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -15,7 +23,7 @@ class UserValidation {
           email: z.email(),
           name: z.string().min(5).max(255),
           role: z.enum(UserRole),
-          password: z.string().min(6).max(255),
+          password: passwordValidation,
         };
         z.object(schema).parse(req.body);
         next();
@@ -44,6 +52,19 @@ class UserValidation {
         const schema = {
           email: z.email(),
           otp: z.string(),
+        };
+        z.object(schema).parse(req.body);
+        next();
+      } catch (err) {
+        ErrorValidation.handleZodError(err, res);
+      }
+    };
+  };
+  resetPassword = () => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const schema = {
+          newPassword: passwordValidation,
         };
         z.object(schema).parse(req.body);
         next();

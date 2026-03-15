@@ -4,6 +4,7 @@ import z, { ZodError } from 'zod';
 
 class ErrorValidation {
   handleZodError(err: any, res: Response) {
+    console.log(err);
     if (err instanceof ZodError) {
       res.status(400).json({
         message: 'Fail to validate parameters',
