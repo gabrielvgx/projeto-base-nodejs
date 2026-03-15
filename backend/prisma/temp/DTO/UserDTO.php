@@ -9,6 +9,7 @@ class UserDTO
         public ?string $email = null,
         public ?UserRole $role = null,
         public ?string $password = null,
+        public ?string $otpSecret = null,
         public ?\DateTimeImmutable $createdAt = null
     ) {}
 }

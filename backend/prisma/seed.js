@@ -1,15 +1,22 @@
 import path from 'node:path';
 import dotenv from 'dotenv';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient,
-  UserRole } from '../dist/generated/prisma/client.js';
+import { PrismaPg } from '@prisma/adapter-pg';
+import {
+  PrismaClient,
+  UserRole
+} from '../dist/generated/prisma/client.js';
+
+const sqliteAdapter = new PrismaBetterSqlite3({ url: process.env['DATABASE_URL'] || '' });
+const connectionString = `${process.env.DATABASE_URL}`;
+const pgAdapter = new PrismaPg({ connectionString });
+const adapter = connectionString.includes('postgre') ? pgAdapter : sqliteAdapter;
 
 const backendPath = path.dirname(path.join(process.argv[1] || '',
   '..'));
 dotenv.config({ path: path.join(backendPath,
   '.env') });
 
-const adapter = new PrismaBetterSqlite3({ url: process.env['DATABASE_URL'] || '' });
 const prisma = new PrismaClient({ adapter });
 
 const passwordHash = '$2b$10$MS8IavIvPIjdjW.WfKPrQOOFlqLHxUxZTlPVsluxKpLKutgqwUI0K'; // abc123

@@ -28,6 +28,9 @@ class UserEntity
     #[ORM\Column(type: "string", nullable: false)]
     private string $password;
 
+    #[ORM\Column(type: "string", nullable: true)]
+    private string $otpSecret;
+
     #[ORM\Column(type: "datetime_immutable", nullable: false)]
     private \DateTimeImmutable $createdAt;
 
@@ -50,6 +53,9 @@ class UserEntity
         }
         if ($dto->password !== null) {
             $this->password = $dto->password;
+        }
+        if ($dto->otpSecret !== null) {
+            $this->otpSecret = $dto->otpSecret;
         }
         $this->createdAt = new \DateTimeImmutable();
     }
@@ -104,6 +110,16 @@ class UserEntity
     public function setPassword(string $value): void
     {
         $this->password = $value;
+    }
+
+    public function getOtpSecret(): string
+    {
+        return $this->otpSecret;
+    }
+
+    public function setOtpSecret(string $value): void
+    {
+        $this->otpSecret = $value;
     }
 
     public function getCustomerSchedulers(): Collection

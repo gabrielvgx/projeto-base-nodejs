@@ -33,10 +33,9 @@ class ProductRoute {
       UserScopeMiddleware.adminOnly(),
       ProductValidation.update(),
       async (req: Request, res: Response) => {
-        console.log('updating product...');
         const id = req.params.id as string;
         const result = await ProductController.update(id, req.body);
-        console.log('updated product...');
+
         res.json(result);
       },
     );

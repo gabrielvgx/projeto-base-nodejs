@@ -9,13 +9,14 @@ class DebugController {
       template: '',
       attachemnts: [] as Attachment[],
     };
+    let subject = 'Debug Test';
     switch (data.template) {
       case 'otp':
-        const { template, attachments } = OTPTemplate.buildOTP(
-          data.value?.otp || '123456',
-        );
+        const otpValue = data.value?.otp || '123456';
+        const { template, attachments } = OTPTemplate.buildOTP(otpValue);
         email.template = template;
         email.attachemnts = attachments;
+        subject = `${otpValue} - Código de recuperação de senha`;
         break;
       default:
         throw new AppError(
@@ -25,7 +26,7 @@ class DebugController {
     }
     await SMTP.sendMail({
       body: email.template,
-      subject: 'Recuperação de Senha',
+      subject,
       to: data.email,
       attachments: email.attachemnts,
     });

@@ -7,7 +7,14 @@ import z from 'zod';
 class AuthMiddleware extends LoggableBase {
   priority = 1;
   isPublicRoute(req: Request) {
-    const publicRoutes = ['/auth', '/product', '/product/:id'];
+    const publicRoutes = [
+      '/auth',
+      '/product',
+      '/product/:id',
+      '/debug/gmail/oauth2callback',
+      '/user/forgot-password',
+      '/user/forgot-password/validate-otp',
+    ];
     const cleanedPath = req.path.replace(/\/$/, '');
     const [basePath, uuid = ''] = cleanedPath.split('/').slice(1);
     const { success: hasUUID } = z.safeParse(

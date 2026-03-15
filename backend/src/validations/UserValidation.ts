@@ -8,19 +8,49 @@ export enum UserRole {
 }
 
 class UserValidation {
-  create = (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const schema = {
-        email: z.email(),
-        name: z.string().min(5).max(255),
-        role: z.enum(UserRole),
-        password: z.string().min(6).max(255),
-      };
-      z.object(schema).parse(req.body);
-      next();
-    } catch (err) {
-      ErrorValidation.handleZodError(err, res);
-    }
+  create = () => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const schema = {
+          email: z.email(),
+          name: z.string().min(5).max(255),
+          role: z.enum(UserRole),
+          password: z.string().min(6).max(255),
+        };
+        z.object(schema).parse(req.body);
+        next();
+      } catch (err) {
+        ErrorValidation.handleZodError(err, res);
+      }
+    };
+  };
+
+  forgotPassword = () => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const schema = {
+          email: z.email(),
+        };
+        z.object(schema).parse(req.body);
+        next();
+      } catch (err) {
+        ErrorValidation.handleZodError(err, res);
+      }
+    };
+  };
+  validateOTP = () => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const schema = {
+          email: z.email(),
+          otp: z.string(),
+        };
+        z.object(schema).parse(req.body);
+        next();
+      } catch (err) {
+        ErrorValidation.handleZodError(err, res);
+      }
+    };
   };
 }
 

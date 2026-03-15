@@ -8,3 +8,4 @@ export * from './RequestUtil.js';
 export * from './ResponseUtil.js';
 export * from './SMTP.js';
 export * from './Text.js';
+export * from './OTPUtil.js';

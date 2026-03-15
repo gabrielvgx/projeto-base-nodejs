@@ -30,6 +30,7 @@ export type UserMinAggregateOutputType = {
   email: string | null
   role: $Enums.UserRole | null
   password: string | null
+  otpSecret: string | null
   createdAt: Date | null
 }
 
@@ -39,6 +40,7 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   role: $Enums.UserRole | null
   password: string | null
+  otpSecret: string | null
   createdAt: Date | null
 }
 
@@ -48,6 +50,7 @@ export type UserCountAggregateOutputType = {
   email: number
   role: number
   password: number
+  otpSecret: number
   createdAt: number
   _all: number
 }
@@ -59,6 +62,7 @@ export type UserMinAggregateInputType = {
   email?: true
   role?: true
   password?: true
+  otpSecret?: true
   createdAt?: true
 }
 
@@ -68,6 +72,7 @@ export type UserMaxAggregateInputType = {
   email?: true
   role?: true
   password?: true
+  otpSecret?: true
   createdAt?: true
 }
 
@@ -77,6 +82,7 @@ export type UserCountAggregateInputType = {
   email?: true
   role?: true
   password?: true
+  otpSecret?: true
   createdAt?: true
   _all?: true
 }
@@ -159,6 +165,7 @@ export type UserGroupByOutputType = {
   email: string
   role: $Enums.UserRole
   password: string
+  otpSecret: string | null
   createdAt: Date
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
@@ -189,6 +196,7 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   password?: Prisma.StringFilter<"User"> | string
+  otpSecret?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   customerSchedulers?: Prisma.SchedulerListRelationFilter
 }
@@ -199,6 +207,7 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  otpSecret?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   customerSchedulers?: Prisma.SchedulerOrderByRelationAggregateInput
 }
@@ -212,6 +221,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   password?: Prisma.StringFilter<"User"> | string
+  otpSecret?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   customerSchedulers?: Prisma.SchedulerListRelationFilter
 }, "id" | "email">
@@ -222,6 +232,7 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  otpSecret?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -237,6 +248,7 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
+  otpSecret?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
@@ -246,6 +258,7 @@ export type UserCreateInput = {
   email: string
   role?: $Enums.UserRole
   password: string
+  otpSecret?: string | null
   createdAt?: Date | string
   customerSchedulers?: Prisma.SchedulerCreateNestedManyWithoutCustomerInput
 }
@@ -256,6 +269,7 @@ export type UserUncheckedCreateInput = {
   email: string
   role?: $Enums.UserRole
   password: string
+  otpSecret?: string | null
   createdAt?: Date | string
   customerSchedulers?: Prisma.SchedulerUncheckedCreateNestedManyWithoutCustomerInput
 }
@@ -266,6 +280,7 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  otpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customerSchedulers?: Prisma.SchedulerUpdateManyWithoutCustomerNestedInput
 }
@@ -276,6 +291,7 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  otpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customerSchedulers?: Prisma.SchedulerUncheckedUpdateManyWithoutCustomerNestedInput
 }
@@ -286,6 +302,7 @@ export type UserCreateManyInput = {
   email: string
   role?: $Enums.UserRole
   password: string
+  otpSecret?: string | null
   createdAt?: Date | string
 }
 
@@ -295,6 +312,7 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  otpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -304,6 +322,7 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  otpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -313,6 +332,7 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  otpSecret?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -322,6 +342,7 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  otpSecret?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -331,6 +352,7 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   role?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  otpSecret?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -345,6 +367,10 @@ export type StringFieldUpdateOperationsInput = {
 
 export type EnumUserRoleFieldUpdateOperationsInput = {
   set?: $Enums.UserRole
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -371,6 +397,7 @@ export type UserCreateWithoutCustomerSchedulersInput = {
   email: string
   role?: $Enums.UserRole
   password: string
+  otpSecret?: string | null
   createdAt?: Date | string
 }
 
@@ -380,6 +407,7 @@ export type UserUncheckedCreateWithoutCustomerSchedulersInput = {
   email: string
   role?: $Enums.UserRole
   password: string
+  otpSecret?: string | null
   createdAt?: Date | string
 }
 
@@ -405,6 +433,7 @@ export type UserUpdateWithoutCustomerSchedulersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  otpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -414,6 +443,7 @@ export type UserUncheckedUpdateWithoutCustomerSchedulersInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  otpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -454,6 +484,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   role?: boolean
   password?: boolean
+  otpSecret?: boolean
   createdAt?: boolean
   customerSchedulers?: boolean | Prisma.User$customerSchedulersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -465,6 +496,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   role?: boolean
   password?: boolean
+  otpSecret?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["user"]>
 
@@ -474,6 +506,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   role?: boolean
   password?: boolean
+  otpSecret?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["user"]>
 
@@ -483,10 +516,11 @@ export type UserSelectScalar = {
   email?: boolean
   role?: boolean
   password?: boolean
+  otpSecret?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "role" | "password" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "role" | "password" | "otpSecret" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   customerSchedulers?: boolean | Prisma.User$customerSchedulersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -505,6 +539,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     role: $Enums.UserRole
     password: string
+    otpSecret: string | null
     createdAt: Date
   }, ExtArgs["result"]["user"]>
   composites: {}
@@ -935,6 +970,7 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly otpSecret: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     

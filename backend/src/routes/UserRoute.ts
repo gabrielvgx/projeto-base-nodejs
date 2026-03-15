@@ -3,6 +3,7 @@ import { Router, type Application } from 'express';
 import { UserValidation } from '@validations';
 import type { Request, Response } from '@types';
 import { UserScopeMiddleware } from '@middlewares';
+import { JWT } from '@utils';
 
 class UserRoute {
   register(app: Application) {
@@ -10,7 +11,7 @@ class UserRoute {
     router.post(
       '/user',
       UserScopeMiddleware.adminOnly(),
-      UserValidation.create,
+      UserValidation.create(),
       async (req: Request, res: Response) => {
         const result = await UserController.create(req.body);
         res.status(201).json(result);
@@ -61,6 +62,36 @@ class UserRoute {
         res.status(204).send();
       },
     );
+
+    router.post(
+      '/user/forgot-password',
+      UserValidation.forgotPassword(),
+      async (req: Request, res: Response) => {
+        const result = await UserController.forgotPassword(req.body.email);
+        res.status(200).send(result);
+      },
+    );
+
+    router.post(
+      '/user/forgot-password/validate-otp',
+      UserValidation.validateOTP(),
+      async (req: Request, res: Response) => {
+        const params = req.body;
+        const isValid = await UserController.validateOTP(params);
+        if (isValid) {
+          const token = JWT.generate({
+            email: params.email,
+            operation: 'RESET_PASSWORD',
+          });
+          res.status(200).json({ token });
+        } else {
+          res.status(400).send({
+            message: 'INVALID_OTP_OR_EXPIRED',
+          });
+        }
+      },
+    );
+
     app.use(router);
   }
 }
